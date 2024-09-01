@@ -1,4 +1,23 @@
-body {
-  min-height: 100vh;
-  background: no-repeat center/100% url('../images/background-desktop.svg');
+@font-face {
+  font-family: 'Memoirs';
+  src: url('../fonts/MouseMemoirs-Regular.ttf');
+}
+
+main {
+  height: 100vh;
+  background: url('../images/background-desktop.svg') no-repeat center/cover;
+}
+
+.intro {
+  display: grid;
+  place-items: center;
+  height: 100%;
+}
+.intro div {
+  width: 100%;
+  max-width: 600px;
+  height: 500px;
+  border: 1px solid black;
+  border-radius: 80px;
+  box-shadow: inset 0 10px 0 10px #2462ff,  0 -10px  red;
 }
