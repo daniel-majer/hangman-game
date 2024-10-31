@@ -3,6 +3,14 @@
   src: url('../fonts/MouseMemoirs-Regular.ttf');
 }
 
+:root {
+  --sm-screen: 640px;
+  --md-screen: 768px;
+  --lg-screen: 1024px;
+  --xl-screen: 1280px;
+  --xxl-screen: 1536px;
+}
+
 * {
   scrollbar-color: #344aba rgba(0, 20, 121, 0.8);
   scrollbar-width: thin;
@@ -106,6 +114,7 @@ main {
   height: 75px;
   width: 75px;
   margin-left: 100px;
+  position: absolute;
 }
 .instructions button svg {
   width: 30px;
@@ -114,13 +123,9 @@ main {
 .instructions div:first-child {
   display: flex;
   align-items: center;
-
   justify-content: space-between;
-  width: 100%;
-  margin-top: 50px;
 }
 .instructions h1 {
-  text-align: center;
   font-size: 136px;
   background-clip: text;
   -webkit-background-clip: text;
@@ -128,9 +133,7 @@ main {
   background-image: linear-gradient(to bottom, #67b6ff, #fff);
   position: relative;
   font-weight: 300;
-  margin: 0;
   margin-inline: auto;
-  
 }
 .instructions h1::before {
   content: attr(stroke-text);
@@ -138,4 +141,50 @@ main {
   left: 0;
   z-index: -1;
   -webkit-text-stroke: 16px #243041;
+}
+
+/* RESPONSIVE DESIGN */
+@media screen and (max-width: 1536px) {
+}
+
+@media screen and (max-width: 1280px) {
+}
+
+@media screen and (max-width: 1024px) {
+  .instructions h1 {
+    font-size: 120px;
+  }
+  .instructions button {
+    height: 60px;
+    width: 60px;
+    margin-left: 75px;
+  }
+  .instructions button svg {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .instructions h1 {
+    font-size: 104px;
+  }
+  .instructions button {
+    height: 45px;
+    width: 45px;
+    margin-left: 50px;
+  }
+  .instructions button svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .instructions h1 {
+    margin-inline: 0;
+    margin-left: auto;
+    margin-right: 50px;
+    font-size: clamp(40px, 10vw, 64px);
+  }
 }
