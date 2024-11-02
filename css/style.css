@@ -4,71 +4,51 @@
 }
 
 :root {
-  --sm-screen: 640px;
-  --md-screen: 768px;
-  --lg-screen: 1024px;
-  --xl-screen: 1280px;
-  --xxl-screen: 1536px;
+  --transition: 0.3s all ease-out;
 }
 
 * {
   scrollbar-color: #344aba rgba(0, 20, 121, 0.8);
   scrollbar-width: thin;
 }
-body {
-  position: relative;
-  z-index: -3;
-  overflow: hidden;
-}
 
 main {
+  position: relative;
   min-height: 100vh;
   background: url('../images/background-desktop.svg') no-repeat center/cover;
   font-family: 'Mouse Memoirs', sans-serif;
+  text-align: center;
+  overflow-x: hidden;
+}
+
+.main-menu {
   position: relative;
-  z-index: -2;
-  width: 100%;
-  /* display: grid;
-  place-items: center; */
+  padding: 120px 0 0 0;
+  transition: var(--transition);
 }
-.page {
+.main-menu img {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 3%;
+  left: 50%;
+  transform: translateX(-50%);
 }
-.intro {
-  display: grid;
-  place-items: center;
-  height: 100%;
-  transition: 0.5s all ease-out;
+.main-menu div {
+  /* position: relative; */
+  width: 100%;
+  max-width: 600px;
   margin: 0 auto;
-  width: 100%;
-  max-width: 600px;
-}
-.intro-container {
-  /*   width: 100%;
-  max-width: 600px;
-  display: grid;
-  place-items: center;
-  transition: 0.5s all ease-out; */
-}
-.intro .menu {
-  width: 100%;
-  height: 450px;
   background: linear-gradient(to bottom, #344aba, rgba(0, 20, 121, 0.8));
   border-radius: 80px;
   box-shadow: inset 0 -10px 0 6px #140e66, inset 0 0 0 10px #2462ff;
+  padding: 120px 0 60px;
+
   display: flex;
   justify-content: end;
   align-items: center;
   flex-direction: column;
-  row-gap: 40px;
-  padding-bottom: 60px;
-  margin-bottom: 20px;
+  row-gap: 60px;
 }
-.intro .play-btn {
+.main-menu .play-btn {
   width: 200px;
   height: 200px;
   border-radius: 50%;
@@ -77,26 +57,25 @@ main {
   box-shadow: inset 0 -6px 0 6px #232f40, inset 0 -12px 0 12px #9e2cf5;
   position: relative;
 }
-.intro .play-btn svg {
+.main-menu .play-btn svg {
   width: 60px;
 }
-.intro .play-btn::after {
+.main-menu .play-btn::after {
   content: '';
   width: 100%;
   height: 100%;
-  border-radius: 50%;
-  display: inline-block;
   position: absolute;
   top: 0;
   left: 0;
-  transition: 0.3s all ease-in-out;
+  border-radius: 50%;
+  transition: var(--transition);
 }
-.intro .play-btn:hover::after,
-.intro .play-btn:active::after {
+.main-menu .play-btn:hover::after,
+.main-menu .play-btn:active::after {
   cursor: pointer;
   background: #ffffff50;
 }
-.intro .instructions-btn {
+.main-menu .instructions-btn {
   background: transparent;
   border: none;
   color: #fff;
@@ -106,30 +85,36 @@ main {
   border-radius: 50px;
   padding: 10px 60px;
   box-shadow: inset 0 -3px 0 3px #140e66, inset 0 0 0 5px #3d74ff;
-  transition: 0.3s all ease-in-out;
+  transition: var(--transition);
 }
-.intro .instructions-btn:hover,
-.intro .instructions-btn:active {
-  background: #3d74ff;
+.main-menu .instructions-btn:hover,
+.main-menu .instructions-btn:active {
+  background: #4e7ffd;
   box-shadow: inset 0 -3px 0 3px #140e66, inset 0 0 0 5px #2462ff;
   cursor: pointer;
 }
-.intro img {
-  text-align: center;
-  margin: 20px 0 -80px 0;
-  z-index: 2;
-}
-.show-intro {
-  transition: 0.5s all ease-out;
+
+.show-menu {
+  transition: var(--transition);
   transform: translateX(-200%);
 }
 
 /* HOW TO PLAY */
 .instructions {
-  min-height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 150vh;
+  transition: var(--transition);
   transform: translateX(100%);
-  transition: 0.5s all ease-out;
+  /* padding-top: 40px; */
 }
+.instructions div:first-child {
+  display: flex;
+  align-items: center;
+}
+
 .instructions button {
   background: linear-gradient(to bottom, #fe71fe, #7199ff);
   border: none;
@@ -139,18 +124,17 @@ main {
   margin-left: 100px;
   position: absolute;
   cursor: pointer;
-  transition: all ease-out 1s;
+  transition: var(--transition);
 }
 .instructions button::after {
   content: '';
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  display: inline-block;
   position: absolute;
   top: 0;
   left: 0;
-  transition: 0.5s all ease-in-out;
+  transition: var(--transition);
 }
 .instructions button:hover::after,
 .instructions button:active::after {
@@ -161,11 +145,6 @@ main {
   width: 30px;
   height: 30px;
 }
-.instructions div:first-child {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
 .instructions h1 {
   font-size: 136px;
   background-clip: text;
@@ -174,6 +153,7 @@ main {
   background-image: linear-gradient(to bottom, #67b6ff, #fff);
   position: relative;
   font-weight: 300;
+  margin: 0;
   margin-inline: auto;
 }
 .instructions h1::before {
@@ -183,10 +163,10 @@ main {
   z-index: -1;
   -webkit-text-stroke: 16px #243041;
 }
-
 .show-instructions {
-  transition: 0.5s all ease-out;
+  transition: var(--transition);
   transform: translateX(0);
+  /*   display: block; */
 }
 
 /* RESPONSIVE DESIGN */
