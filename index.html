@@ -12,11 +12,10 @@
 
 <body>
   <main>
-    <section class="main-menu">
+    <section class="main-menu" data-set="current">
       <img src="./images/logo.svg" alt="Hangman game logo">
-
       <div>
-        <button class="play-btn">
+        <button class="categories-btn">
           <svg>
             <use xlink:href="./images/icons.svg#play" />
           </svg>
@@ -25,16 +24,27 @@
       </div>
     </section>
 
-    <section class="instructions">
+    <section class="instructions page">
       <div>
-        <button class="back-btn">
+        <button class="menu-btn">
           <svg>
             <use xlink:href="./images/icons.svg#back" />
           </svg>
         </button>
-        <h1 stroke-text="How to play">How to play</h1>
+        <h1 class="title" stroke-text="How to play">How to play</h1>
       </div>
 
+    </section>
+
+    <section class="categories page">
+      <div>
+        <button class="menu-btn">
+          <svg>
+            <use xlink:href="./images/icons.svg#back" />
+          </svg>
+        </button>
+        <h1 class="title" stroke-text="Pick a Category">Pick a Category</h1>
+      </div>
     </section>
   </main>
 </body>
