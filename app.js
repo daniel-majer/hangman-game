@@ -1,6 +1,5 @@
 class Return {
   constructor() {
-
     /* SECTIONS */
     this.introSection = document.querySelector('.main-menu')
     this.introContainer = document.querySelector('.intro-container')
@@ -37,7 +36,9 @@ class Return {
   load() {
     const height = this.introSection.getBoundingClientRect().height - 1
     this.instructionsSection.style.height = height + 'px'
+    console.log(this.a.a)
   }
+  
 }
 
 const start = new Return()
