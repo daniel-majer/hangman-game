@@ -29,10 +29,9 @@ class Navigation {
     this.backBtn.forEach(btn => {
       btn.addEventListener('click', this.onBack.bind(this))
     })
-    /* this.backBtn.addEventListener('click', this.onBack.bind(this)) */
     /* LOAD */
-    document.addEventListener('DOMContentLoaded', this.onLoad.bind(this))
-  }
+/*     document.addEventListener('DOMContentLoaded', this.onLoad.bind(this))
+ */  }
 
   nextStep(side, func) {
     if (this.btn) {
@@ -51,7 +50,8 @@ class Navigation {
       section => section.dataset.set === 'current'
     )
     this.currentSection.dataset.set = ''
-  }
+/*     this.currentSection.style.height = ''
+ */  }
 
   onBack(e) {
     this.findCurrentSection(e)
@@ -65,12 +65,12 @@ class Navigation {
     this.nextStep('right', 'add')
   }
 
-  onLoad() {
+/*   onLoad() {
     const height = this.menuSection.getBoundingClientRect().height - 1
     this.allSections.forEach(function (section) {
       section.style.height = height + 'px'
     })
-  }
+  } */
 }
 
 class App {
