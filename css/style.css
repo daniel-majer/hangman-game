@@ -224,15 +224,10 @@ main {
   .title {
     margin-inline: 0;
     margin-left: auto;
-    font-size: 120px;
+    font-size: 132px;
   }
-  .menu-btn {
-    height: 60px;
-    width: 60px;
-  }
-  .menu-btn svg {
-    width: 25px;
-    height: 25px;
+  .instructions {
+    padding: 40px 60px 120px;
   }
 
   .instructions-container {
@@ -240,8 +235,6 @@ main {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(3, 1fr);
     row-gap: 20px;
-    /* flex-direction: column;
-    */
   }
   .instructions-container div {
     display: grid;
@@ -263,20 +256,51 @@ main {
 
 @media screen and (max-width: 768px) {
   .title {
-    font-size: 104px;
+    font-size: 112px;
   }
   .menu-btn {
-    height: 45px;
-    width: 45px;
+    height: 60px;
+    width: 60px;
   }
   .menu-btn svg {
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
+  }
+
+  .instructions {
+    padding: 40px 40px 120px;
   }
 }
 
 @media screen and (max-width: 640px) {
   .title {
-    font-size: clamp(40px, 10vw, 64px);
+    font-size: 60px;
+  }
+  .menu-btn {
+    height: 40px;
+    width: 40px;
+  }
+  .menu-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+  .instructions > div:first-child,
+  .categories > div:first-child {
+    margin-top: 0;
+  }
+
+  .instructions {
+    padding: 40px 20px 120px;
+  }
+  .instructions-container {
+    margin-top: 60px;
+  }
+
+  .instructions-container span {
+    grid-row: 1;
+    grid-column: 1;
+  }
+  .instructions-container p {
+    grid-column: 1/3;
   }
 }
