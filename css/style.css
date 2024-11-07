@@ -283,6 +283,7 @@ main {
   .menu-btn svg {
     width: 20px;
     height: 20px;
+    
   }
   .instructions > div:first-child,
   .categories > div:first-child {
