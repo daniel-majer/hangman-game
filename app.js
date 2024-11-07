@@ -11,6 +11,7 @@ class Navigation {
     this.instructionsSection = getElement('.instructions')
     this.categoriesSection = getElement('.categories')
     this.allSections = document.querySelectorAll('.page')
+    this.pickCategory = getElement('.categories-container')
 
     /* BUTTONS */
     this.playBtn = getElement('.categories-btn')
@@ -21,6 +22,7 @@ class Navigation {
     this.current = 'current'
 
     /* EVENTS */
+    this.createCategories()
 
     /* FORWARD */
     this.instructionsBtn.addEventListener('click', this.onForward.bind(this))
@@ -30,8 +32,22 @@ class Navigation {
       btn.addEventListener('click', this.onBack.bind(this))
     })
     /* LOAD */
-/*     document.addEventListener('DOMContentLoaded', this.onLoad.bind(this))
- */  }
+    /*     document.addEventListener('DOMContentLoaded', this.onLoad.bind(this))
+     */
+  }
+
+  async createCategories() {
+    const response = await fetch('./data/data.json')
+    if (!response.ok) throw new Error('Network response was not ok')
+    const data = await response.json()
+
+    const keys = Object.keys(data.categories)
+    let displayCategories = keys.map(category => {
+      return `<li>${category}</li>`
+    })
+    displayCategories = displayCategories.join('')
+    this.pickCategory.innerHTML = displayCategories
+  }
 
   nextStep(side, func) {
     if (this.btn) {
@@ -50,8 +66,9 @@ class Navigation {
       section => section.dataset.set === 'current'
     )
     this.currentSection.dataset.set = ''
-/*     this.currentSection.style.height = ''
- */  }
+    /*     this.currentSection.style.height = ''
+     */
+  }
 
   onBack(e) {
     this.findCurrentSection(e)
@@ -65,7 +82,7 @@ class Navigation {
     this.nextStep('right', 'add')
   }
 
-/*   onLoad() {
+  /*   onLoad() {
     const height = this.menuSection.getBoundingClientRect().height - 1
     this.allSections.forEach(function (section) {
       section.style.height = height + 'px'
