@@ -12,7 +12,7 @@
 
 <body>
   <main>
-    <section class="main-menu" data-set="current">
+    <section style="display: none;" class="main-menu" data-set="current">
       <img src="./images/logo.svg" alt="Hangman game logo">
       <div>
         <button class="categories-btn">
@@ -24,7 +24,7 @@
       </div>
     </section>
 
-    <section class="instructions page">
+    <section style="display: none;" class="instructions page">
       <div>
         <button class="menu-btn">
           <svg>
@@ -60,10 +60,9 @@
             the word, you lose.</p>
         </div>
       </div>
-
     </section>
 
-    <section class="categories page">
+    <section style="display: none;" class="categories page">
       <div>
         <button class="menu-btn">
           <svg>
@@ -74,8 +73,32 @@
       </div>
 
       <ul class="categories-container">
-
       </ul>
+    </section>
+
+    <section style="transform: translateX(0);" class="gameplay">
+      <div>
+        <header>
+          <div>
+            <button class="menu-btn modal">
+              <svg>
+                <use xlink:href="./images/icons.svg#modal" />
+              </svg>
+            </button>
+            <h1>Capital Cities</h1>
+          </div>
+          <div>
+            <progress max="100" value="70"></progress>
+            <img src="./images/icon-heart.svg" alt="Heart">
+          </div>
+        </header>
+
+        <div class="answer">
+          <div>
+            <ul class="answer-letters"></ul>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 </body>

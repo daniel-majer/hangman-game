@@ -3,6 +3,32 @@ function getElement(el) {
   if (element) return element
   throw new Error(`Please check "${el}" selector, no such element exists`)
 }
+const answer = 'Orange Is the New Black'
+
+class Gameplay {
+  constructor() {
+    this.answerContainer = getElement('.answer-letters')
+
+    this.generateAnswer()
+  }
+
+  generateAnswer() {
+    const words = answer.split(' ')
+
+    let displayAnswer = words.map(word => {
+      return `<li>${word
+        .split('')
+        .map(w => {
+          return `<span>${w.toUpperCase()}</span>`
+        })
+        .join('')}</li>`
+    })
+    displayAnswer = displayAnswer.join('')
+    this.answerContainer.innerHTML = displayAnswer
+
+    console.log(words)
+  }
+}
 
 class Navigation {
   constructor() {
@@ -93,6 +119,7 @@ class Navigation {
 class App {
   static init() {
     const start = new Navigation()
+    const gamepaly = new Gameplay()
   }
 }
 

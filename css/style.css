@@ -100,14 +100,28 @@ main {
 
 /* HOW TO PLAY */
 .instructions,
-.categories {
+.categories,
+.gameplay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  padding: 40px 80px 120px;
+  padding: 40px 80px;
   transition: var(--transition);
   transform: translateX(100%);
+}
+.categories::after,
+.instructions::after,
+.gameplay::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  z-index: -999;
+  background-color: #140e668a;
 }
 .instructions > div:first-child,
 .categories > div:first-child {
@@ -202,17 +216,6 @@ main {
   transform: translateX(0);
 }
 
-.categories::after,
-.instructions::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -999;
-  background-color: #140e668a;
-}
 .categories-container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -238,6 +241,78 @@ main {
   box-shadow: inset 0 -2px 0 2px #140e66, inset 0 0 0 4px #2463ff;
 }
 
+.gameplay {
+  color: #fff;
+}
+.gameplay header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.gameplay > div {
+  width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
+}
+.gameplay header div {
+  display: flex;
+  align-items: center;
+  column-gap: 40px;
+}
+.gameplay .modal {
+  position: relative;
+}
+.gameplay h1 {
+  font-size: 72px;
+  letter-spacing: 4px;
+  font-weight: 400;
+  margin: 0;
+  display: inline-block;
+}
+
+/* Chrome, Safari a Edge */
+progress::-webkit-progress-bar {
+  background-color: #fff;
+  padding: 8px;
+}
+progress::-webkit-progress-value {
+  background-color: #140e66;
+  border-radius: 20px;
+}
+/* Firefox */
+progress::-moz-progress-bar {
+  background-color: #140e66;
+}
+progress {
+  height: 30px;
+  width: 240px;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.answer {
+  margin-top: 80px;
+}
+.answer ul {
+  display: flex;
+  justify-content: center;
+  column-gap: 80px;
+  row-gap: 40px;
+  flex-wrap: wrap;
+}
+.answer li {
+  font-size: 72px;
+  display: flex;
+  gap: 20px;
+}
+.answer ul li span {
+  width: 72px;
+  display: inline-block;
+  background-color: #2463ff;
+  border-radius: 24px;
+  user-select: none;
+}
+
 /* RESPONSIVE DESIGN */
 @media screen and (max-width: 1536px) {
 }
@@ -254,6 +329,10 @@ main {
   }
   .instructions-container p {
     font-size: 28px;
+  }
+
+  .gameplay {
+    padding: 40px;
   }
 }
 
@@ -297,7 +376,33 @@ main {
   .categories-container li {
     padding: 40px 0;
     border-radius: 20px;
-    
+  }
+
+  .gameplay progress {
+    height: 20px;
+    width: 150px;
+  }
+  .gameplay progress::-webkit-progress-bar {
+    padding: 4px;
+  }
+  .gameplay h1 {
+    font-size: 52px;
+  }
+
+  .answer {
+    margin-top: 60px;
+  }
+  .answer ul {
+    column-gap: 60px;
+    row-gap: 30px;
+  }
+  .answer li {
+    font-size: 60px;
+    column-gap: 10px;
+  }
+  .answer ul li span {
+    width: 60px;
+    border-radius: 20px;
   }
 }
 
@@ -312,6 +417,48 @@ main {
   }
   .categories-container {
     font-size: 52px;
+  }
+
+  .gameplay {
+    padding: 20px;
+  }
+  .gameplay header div {
+    column-gap: 20px;
+  }
+  .gameplay progress {
+    height: 20px;
+    width: 120px;
+  }
+  .gameplay progress::-webkit-progress-bar {
+    padding: 4px;
+  }
+  .gameplay h1 {
+    font-size: 36px;
+    text-align: start;
+  }
+  .gameplay .menu-btn {
+    height: 50px;
+    width: 50px;
+  }
+  .gameplay .menu-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+  .gameplay img {
+    width: 40px;
+    height: 38px;
+  }
+
+  .answer ul {
+    column-gap: 50px;
+    row-gap: 25px;
+  }
+  .answer li {
+    font-size: 50px;
+  }
+  .answer ul li span {
+    width: 50px;
+    border-radius: 15px;
   }
 }
 
@@ -379,5 +526,47 @@ main {
   }
   .categories-container li {
     padding: 20px 0;
+  }
+
+  .gameplay {
+    padding: 10px;
+  }
+  .gameplay header div {
+    column-gap: 10px;
+  }
+  .gameplay progress {
+    height: 20px;
+    width: 80px;
+  }
+  .gameplay h1 {
+    font-size: 28px;
+  }
+  .gameplay .menu-btn {
+    height: 40px;
+    width: 40px;
+  }
+  .gameplay .menu-btn svg {
+    width: 15px;
+    height: 15px;
+  }
+  .gameplay img {
+    width: 30px;
+    height: 28px;
+  }
+
+  .answer {
+    margin-top: 50px;
+  }
+  .answer ul {
+    column-gap: 30px;
+    row-gap: 20px;
+  }
+  .answer li {
+    font-size: 32px;
+    column-gap: 5px;
+  }
+  .answer ul li span {
+    width: 32px;
+    border-radius: 10px;
   }
 }

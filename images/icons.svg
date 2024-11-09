@@ -21,4 +21,18 @@
         <path fill="#fff" d="M0 19.5 19.02.5v12.244C26.348 12.744 41 17.896 41 38.5c0-11.147-14.653-13.37-21.98-13.089V38.5L0 19.5Z"/>
     </symbol>
 
+    <symbol fill="none" viewBox="0 0 38 32" id="modal" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#fff" d="M0 0h38v7H0zm0 13h38v6H0zm0 12h38v7H0z"/>
+    </symbol>
+
+    <symbol fill="none" viewBox="0 0 54 50" id="heart" xmlns="http://www.w3.org/2000/svg">
+        <path fill="url(#a)" d="m26.667 49.467-3.867-3.52C9.067 33.493 0 25.253 0 15.2 0 6.96 6.453.533 14.667.533c4.64 0 9.093 2.16 12 5.547 2.906-3.387 7.36-5.547 12-5.547C46.88.533 53.333 6.96 53.333 15.2c0 10.053-9.066 18.293-22.8 30.747l-3.866 3.52Z"/>
+        <defs>
+            <linearGradient id="a" x1="26.667" x2="26.667" y1="8.567" y2="49.467" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#FE71FE"/>
+                <stop offset="1" stop-color="#7199FF"/>
+            </linearGradient>
+        </defs>
+    </symbol>
+
 </svg>
