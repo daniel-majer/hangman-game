@@ -25,8 +25,6 @@ class Gameplay {
     })
     displayAnswer = displayAnswer.join('')
     this.answerContainer.innerHTML = displayAnswer
-
-    console.log(words)
   }
 }
 
@@ -36,90 +34,104 @@ class Navigation {
     this.menuSection = getElement('.main-menu')
     this.instructionsSection = getElement('.instructions')
     this.categoriesSection = getElement('.categories')
-    this.allSections = document.querySelectorAll('.page')
-    this.pickCategory = getElement('.categories-container')
+    this.gameplaySection = getElement('.gameplay')
 
     /* BUTTONS */
-    this.playBtn = getElement('.categories-btn')
-    this.instructionsBtn = getElement('.instructions-btn')
-    this.backBtn = document.querySelectorAll('.menu-btn')
+    this.forwardBtn = document.querySelectorAll('.forward-btn')
+    this.forwardBtn.forEach(btn => {
+      btn.addEventListener('click', this.onForward.bind(this))
+    })
 
-    /* OTHERS */
-    this.current = 'current'
-
-    /* EVENTS */
-    this.createCategories()
-
-    /* FORWARD */
-    this.instructionsBtn.addEventListener('click', this.onForward.bind(this))
-    this.playBtn.addEventListener('click', this.onForward.bind(this))
-    /* BACK */
+    this.backBtn = document.querySelectorAll('.back-btn')
     this.backBtn.forEach(btn => {
       btn.addEventListener('click', this.onBack.bind(this))
     })
-    /* LOAD */
-    /*     document.addEventListener('DOMContentLoaded', this.onLoad.bind(this))
-     */
+  }
+
+  setPosition(numb) {
+    this.currentSec.style.transform = `translateX(${numb}%)`
+    this.currentSec.dataset.set = ''
+  }
+
+  setCurrent(nextSec) {
+    nextSec.dataset.set = 'current'
+    this.setSection()
+  }
+
+  onBack(e) {
+    this.setPosition(100)
+
+    if (e.target.classList.contains('modal')) {
+      /*       this.categoriesSection.style.transition = 'none'
+       */ this.categoriesSection.style.transform = 'translateX(100%)'
+    }
+
+    const nextSec = e.target.classList.contains('back-btn') && this.menuSection
+    this.setCurrent(nextSec)
+  }
+
+  onForward(e) {
+    this.setPosition(-100)
+
+    const nextSec =
+      (e.target.classList.contains('play') && this.categoriesSection) ||
+      (e.target.classList.contains('how-to-play') &&
+        this.instructionsSection) ||
+      (e.target.classList.contains('category') && this.gameplaySection)
+
+    this.setCurrent(nextSec)
+    /*   this.currentSec.style.height = ''
+    this.setViewportHeight() */
+  }
+
+  setSection() {
+    const sections = document.querySelectorAll('section')
+    this.currentSec = Array.from(sections).find(
+      sec => sec.dataset.set === 'current'
+    )
+    this.currentSec.style.transform = 'translateX(0)'
   }
 
   async createCategories() {
     const response = await fetch('./data/data.json')
     if (!response.ok) throw new Error('Network response was not ok')
-    const data = await response.json()
 
-    const keys = Object.keys(data.categories)
-    let displayCategories = keys.map(category => {
-      return `<li>${category}</li>`
+    const { categories } = await response.json()
+
+    const keys = Object.keys(categories)
+
+    keys.forEach(category => {
+      const html = `<li class='category'>${category.toUpperCase()}</li>`
+      const container = getElement('.categories-container')
+      container.insertAdjacentHTML('afterbegin', html)
+
+      const categoriesDom = document.querySelectorAll('.category')
+      categoriesDom.forEach(category => {
+        category.addEventListener('click', this.onForward.bind(this))
+      })
     })
-    displayCategories = displayCategories.join('')
-    this.pickCategory.innerHTML = displayCategories
   }
 
-  nextStep(side, func) {
-    if (this.btn) {
-      this[`${this.btn}Section`].dataset.set = this.current
-      this[`${this.btn}Section`].classList[func](`swipe-${side}`)
-    }
+  setViewportHeight() {
+    const main = getElement('main') /* .getBoundingClientRect().height */
+    const h = this.currentSec.getBoundingClientRect().height
+    /* main.style.height = `${h}px` */
+
+    /*     document.querySelectorAll('section').forEach(s => {
+      s.style.height = `${h}px`
+    }) */
+
   }
-
-  findCurrentSection(e) {
-    this.btn = e.target?.classList[0]?.split('-')[0]
-
-    let sections = document.querySelectorAll('section')
-    sections = [...sections]
-
-    this.currentSection = sections.find(
-      section => section.dataset.set === 'current'
-    )
-    this.currentSection.dataset.set = ''
-    /*     this.currentSection.style.height = ''
-     */
-  }
-
-  onBack(e) {
-    this.findCurrentSection(e)
-    this.currentSection.classList.remove('swipe-right')
-    this.nextStep('left', 'remove')
-  }
-
-  onForward(e) {
-    this.findCurrentSection(e)
-    this.currentSection.classList.add('swipe-left')
-    this.nextStep('right', 'add')
-  }
-
-  /*   onLoad() {
-    const height = this.menuSection.getBoundingClientRect().height - 1
-    this.allSections.forEach(function (section) {
-      section.style.height = height + 'px'
-    })
-  } */
 }
 
 class App {
   static init() {
     const start = new Navigation()
-    const gamepaly = new Gameplay()
+    const gameplay = new Gameplay()
+
+    start.setSection()
+    start.setViewportHeight()
+    start.createCategories()
   }
 }
 

@@ -12,21 +12,21 @@
 
 <body>
   <main>
-    <section style="display: none;" class="main-menu" data-set="current">
+    <section class="main-menu" data-set="current">
       <img src="./images/logo.svg" alt="Hangman game logo">
       <div>
-        <button class="categories-btn">
+        <button class="forward-btn play">
           <svg>
             <use xlink:href="./images/icons.svg#play" />
           </svg>
         </button>
-        <button class="instructions-btn">How to play</button>
+        <button class="forward-btn how-to-play">How to play</button>
       </div>
     </section>
 
-    <section style="display: none;" class="instructions page">
+    <section class="instructions">
       <div>
-        <button class="menu-btn">
+        <button class="back-btn">
           <svg>
             <use xlink:href="./images/icons.svg#back" />
           </svg>
@@ -62,9 +62,9 @@
       </div>
     </section>
 
-    <section style="display: none;" class="categories page">
+    <section class="categories">
       <div>
-        <button class="menu-btn">
+        <button class="back-btn">
           <svg>
             <use xlink:href="./images/icons.svg#back" />
           </svg>
@@ -76,11 +76,11 @@
       </ul>
     </section>
 
-    <section style="transform: translateX(0);" class="gameplay">
+    <section class="gameplay">
       <div>
         <header>
           <div>
-            <button class="menu-btn modal">
+            <button class="back-btn modal">
               <svg>
                 <use xlink:href="./images/icons.svg#modal" />
               </svg>
