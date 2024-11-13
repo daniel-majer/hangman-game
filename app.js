@@ -115,10 +115,10 @@ class Navigation {
   setViewportHeight() {
     const main = getElement('main') /* .getBoundingClientRect().height */
     const h = this.currentSec.getBoundingClientRect().height
-    /* main.style.height = `${h}px` */
+    /* main.style.height = `${h}px ` */
 
     /*     document.querySelectorAll('section').forEach(s => {
-      s.style.height = `${h}px`
+      s.style.height = `  ${h}px`
     }) */
 
   }
