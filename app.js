@@ -46,6 +46,27 @@ class Navigation {
     this.backBtn.forEach(btn => {
       btn.addEventListener('click', this.onBack.bind(this))
     })
+
+    this.modalOverlay = getElement('.modal-overlay')
+    this.modalOverlay.addEventListener('click', this.closeModal.bind(this))
+
+    this.modalBtn = getElement('.modal')
+    this.modalBtn.addEventListener('click', this.openModal.bind(this))
+  }
+
+  closeModal(e) {
+    if (
+      e.target.classList.contains('continue') ||
+      e.target.classList.contains('modal-overlay')
+    )
+      this.modalOverlay.classList.add('hidden')
+  }
+
+  openModal(e) {
+    this.categoriesSection.style.transform = 'translateX(100%)'
+
+    if (e.target.classList.contains('modal'))
+      this.modalOverlay.classList.remove('hidden')
   }
 
   setPosition(numb) {
@@ -61,10 +82,7 @@ class Navigation {
   onBack(e) {
     this.setPosition(100)
 
-    if (e.target.classList.contains('modal')) {
-      /*       this.categoriesSection.style.transition = 'none'
-       */ this.categoriesSection.style.transform = 'translateX(100%)'
-    }
+    if (e.target.classList.contains('modal')) return
 
     const nextSec = e.target.classList.contains('back-btn') && this.menuSection
     this.setCurrent(nextSec)
@@ -120,7 +138,6 @@ class Navigation {
     /*     document.querySelectorAll('section').forEach(s => {
       s.style.height = `  ${h}px`
     }) */
-
   }
 }
 

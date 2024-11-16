@@ -12,7 +12,7 @@
 
 <body>
   <main>
-    <section class="main-menu" data-set="current">
+    <section style="display: none;" class="main-menu" data-set="current">
       <img src="./images/logo.svg" alt="Hangman game logo">
       <div>
         <button class="forward-btn play">
@@ -24,9 +24,9 @@
       </div>
     </section>
 
-    <section class="instructions">
+    <section style="display: none;" class="instructions">
       <div>
-        <button class="back-btn">
+        <button class="circle-btn back-btn">
           <svg>
             <use xlink:href="./images/icons.svg#back" />
           </svg>
@@ -62,9 +62,9 @@
       </div>
     </section>
 
-    <section class="categories">
+    <section style="display: none;" class="categories">
       <div>
-        <button class="back-btn">
+        <button class="circle-btn back-btn">
           <svg>
             <use xlink:href="./images/icons.svg#back" />
           </svg>
@@ -76,11 +76,11 @@
       </ul>
     </section>
 
-    <section class="gameplay">
-      <div>
+    <section style="transform: translateX(0);" class="gameplay">
+      <div class="gameplay-header">
         <header>
           <div>
-            <button class="back-btn modal">
+            <button class="circle-btn modal">
               <svg>
                 <use xlink:href="./images/icons.svg#modal" />
               </svg>
@@ -92,11 +92,49 @@
             <img src="./images/icon-heart.svg" alt="Heart">
           </div>
         </header>
+      </div>
 
-        <div class="answer">
-          <div>
-            <ul class="answer-letters"></ul>
-          </div>
+      <div class="answer">
+        <ul class="answer-letters"></ul>
+      </div>
+
+      <div class="alphabet">
+        <ul class="alphabet-letters">
+          <li>A</li>
+          <li>B</li>
+          <li>C</li>
+          <li>D</li>
+          <li>E</li>
+          <li>F</li>
+          <li>G</li>
+          <li>H</li>
+          <li>I</li>
+          <li>J</li>
+          <li>K</li>
+          <li>L</li>
+          <li>M</li>
+          <li>N</li>
+          <li>O</li>
+          <li>P</li>
+          <li>Q</li>
+          <li>R</li>
+          <li>S</li>
+          <li>T</li>
+          <li>U</li>
+          <li>V</li>
+          <li>W</li>
+          <li>X</li>
+          <li>Y</li>
+          <li>Z</li>
+        </ul>
+      </div>
+
+      <div class="modal-overlay hidden">
+        <div class="modal-content">
+          <h1 class="title" stroke-text="Paused">Paused</h1>
+          <button class="button continue">Continue</button>
+          <button class="button">New category</button>
+          <button class="button">Quit game</button>
         </div>
       </div>
     </section>
