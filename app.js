@@ -99,7 +99,6 @@ class Navigation {
 
     this.setCurrent(nextSec)
     /*   this.currentSec.style.height = ''
-
     this.setViewportHeight() */
   }
 
