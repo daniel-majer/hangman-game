@@ -34,80 +34,79 @@ class Navigation {
     this.menuSection = getElement('.main-menu')
     this.instructionsSection = getElement('.instructions')
     this.categoriesSection = getElement('.categories')
-    this.gameplaySection = getElement('.gameplay')
+    this.gamePlaySection = getElement('.gameplay')
 
     /* BUTTONS */
     this.forwardBtn = document.querySelectorAll('.forward-btn')
+    this.backBtn = document.querySelectorAll('.back-btn')
+    this.modalOverlay = getElement('.modal-overlay')
+    this.modalBtn = getElement('.modal')
+
+    /* EVENTS */
     this.forwardBtn.forEach(btn => {
       btn.addEventListener('click', this.onForward.bind(this))
     })
-
-    this.backBtn = document.querySelectorAll('.back-btn')
     this.backBtn.forEach(btn => {
       btn.addEventListener('click', this.onBack.bind(this))
     })
-
-    this.modalOverlay = getElement('.modal-overlay')
     this.modalOverlay.addEventListener('click', this.closeModal.bind(this))
-
-    this.modalBtn = getElement('.modal')
     this.modalBtn.addEventListener('click', this.openModal.bind(this))
   }
 
   closeModal(e) {
-    if (
-      e.target.classList.contains('continue') ||
-      e.target.classList.contains('modal-overlay')
-    )
+    const targetClasses = ['continue', 'modal-overlay', 'new', 'quit']
+
+    if (targetClasses.some(cls => e.target.classList.contains(cls))) {
       this.modalOverlay.classList.add('hidden')
+    }
   }
 
-  openModal(e) {
-    this.categoriesSection.style.transform = 'translateX(100%)'
-
-    if (e.target.classList.contains('modal'))
-      this.modalOverlay.classList.remove('hidden')
+  openModal() {
+    this.modalOverlay.classList.remove('hidden')
   }
 
-  setPosition(numb) {
+  hideCurrentSection(numb) {
     this.currentSec.style.transform = `translateX(${numb}%)`
     this.currentSec.dataset.set = ''
   }
 
-  setCurrent(nextSec) {
-    nextSec.dataset.set = 'current'
-    this.setSection()
-  }
-
-  onBack(e) {
-    this.setPosition(100)
-
-    if (e.target.classList.contains('modal')) return
-
-    const nextSec = e.target.classList.contains('back-btn') && this.menuSection
-    this.setCurrent(nextSec)
-  }
-
-  onForward(e) {
-    this.setPosition(-100)
-
-    const nextSec =
-      (e.target.classList.contains('play') && this.categoriesSection) ||
-      (e.target.classList.contains('how-to-play') &&
-        this.instructionsSection) ||
-      (e.target.classList.contains('category') && this.gameplaySection)
-
-    this.setCurrent(nextSec)
-    /*   this.currentSec.style.height = ''
-    this.setViewportHeight() */
-  }
-
-  setSection() {
+  displayNewSection() {
     const sections = document.querySelectorAll('section')
+
     this.currentSec = Array.from(sections).find(
       sec => sec.dataset.set === 'current'
     )
     this.currentSec.style.transform = 'translateX(0)'
+  }
+
+  onBack(e) {
+    let newSection
+    this.hideCurrentSection(100)
+
+    if (e.target.classList.contains('back-btn')) newSection = this.menuSection
+    if (e.target.classList.contains('new')) newSection = this.categoriesSection
+    if (e.target.classList.contains('modal')) return
+    if (e.target.classList.contains('quit'))
+      this.categoriesSection.style.transform = 'translateX(100%)'
+
+    newSection.dataset.set = 'current'
+
+    this.displayNewSection()
+  }
+
+  onForward(e) {
+    if (e.target.classList.contains('category')) return console.log(e)
+
+    this.hideCurrentSection(-100)
+
+    const newSection =
+      (e.target.classList.contains('play') && this.categoriesSection) ||
+      (e.target.classList.contains('how-to-play') &&
+        this.instructionsSection) ||
+      (e.target.classList.contains('category') && this.gamePlaySection)
+
+    newSection.dataset.set = 'current'
+    this.displayNewSection()
   }
 
   async createCategories() {
@@ -122,22 +121,12 @@ class Navigation {
       const html = `<li class='category'>${category.toUpperCase()}</li>`
       const container = getElement('.categories-container')
       container.insertAdjacentHTML('afterbegin', html)
-
-      const categoriesDom = document.querySelectorAll('.category')
-      categoriesDom.forEach(category => {
-        category.addEventListener('click', this.onForward.bind(this))
-      })
     })
-  }
 
-  setViewportHeight() {
-    const main = getElement('main') /* .getBoundingClientRect().height */
-    const h = this.currentSec.getBoundingClientRect().height
-    /* main.style.height = `${h}px ` */
-
-    /*     document.querySelectorAll('section').forEach(s => {
-      s.style.height = `  ${h}px`
-    }) */
+    const categoriesDom = document.querySelectorAll('.category')
+    categoriesDom.forEach(category => {
+      category.addEventListener('click', this.onForward.bind(this))
+    })
   }
 }
 
@@ -146,10 +135,22 @@ class App {
     const start = new Navigation()
     const gameplay = new Gameplay()
 
-    start.setSection()
-    start.setViewportHeight()
+    start.displayNewSection()
     start.createCategories()
   }
 }
 
-App.init()
+App.init() /* main.style.height = `${h}px ` */
+
+/* .getBoundingClientRect().height */
+
+/*  setViewportHeight() {
+    const main = getElement('main')  */
+/*     const h = this.currentSec.getBoundingClientRect().height
+ */
+
+/*     document.querySelectorAll('section').forEach(s => {
+      s.style.height = `  ${h}px`
+    }) */
+/*   }
+} */

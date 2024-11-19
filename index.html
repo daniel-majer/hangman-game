@@ -12,7 +12,7 @@
 
 <body>
   <main>
-    <section style="display: none;" class="main-menu" data-set="current">
+    <section class="main-menu" data-set="current">
       <img src="./images/logo.svg" alt="Hangman game logo">
       <div>
         <button class="forward-btn play">
@@ -24,7 +24,7 @@
       </div>
     </section>
 
-    <section style="display: none;" class="instructions">
+    <section class="instructions">
       <div>
         <button class="circle-btn back-btn">
           <svg>
@@ -62,7 +62,7 @@
       </div>
     </section>
 
-    <section style="display: none;" class="categories">
+    <section class="categories">
       <div>
         <button class="circle-btn back-btn">
           <svg>
@@ -76,7 +76,7 @@
       </ul>
     </section>
 
-    <section style="transform: translateX(0);" class="gameplay">
+    <section class="gameplay">
       <div class="gameplay-header">
         <header>
           <div>
@@ -133,8 +133,8 @@
         <div class="modal-content">
           <h1 class="title" stroke-text="Paused">Paused</h1>
           <button class="button continue">Continue</button>
-          <button class="button">New category</button>
-          <button class="button">Quit game</button>
+          <button class="button back-btn new">New category</button>
+          <button class="button back-btn quit">Quit game</button>
         </div>
       </div>
     </section>
@@ -142,3 +142,9 @@
 </body>
 
 </html>
+
+<!-- style="transform: translateX(0);"
+ style="display: none;"
+style="display: none;"
+style="display: none;"
+-->
