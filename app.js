@@ -3,17 +3,25 @@ function getElement(el) {
   if (element) return element
   throw new Error(`Please check "${el}" selector, no such element exists`)
 }
-const answer = 'Orange Is the New Black'
 
 class Gameplay {
   constructor() {
     this.answerContainer = getElement('.answer-letters')
+  }
 
+  data(data) {
+    this.data = data
+    console.log(this.data)
+  }
+
+  chooseCategory(category) {
+    this.category = category[0].toUpperCase() + category.slice(1)
+    console.log(this.category)
     this.generateAnswer()
   }
 
   generateAnswer() {
-    const words = answer.split(' ')
+    const words = this.category.split(' ')
 
     let displayAnswer = words.map(word => {
       return `<li>${word
@@ -95,7 +103,8 @@ class Navigation {
   }
 
   onForward(e) {
-    if (e.target.classList.contains('category')) return console.log(e)
+    if (e.target.classList.contains('category'))
+      this.targetInstance.chooseCategory(e.target.textContent.toLowerCase())
 
     this.hideCurrentSection(-100)
 
@@ -114,6 +123,7 @@ class Navigation {
     if (!response.ok) throw new Error('Network response was not ok')
 
     const { categories } = await response.json()
+    this.targetInstance.data(categories)
 
     const keys = Object.keys(categories)
 
@@ -128,6 +138,10 @@ class Navigation {
       category.addEventListener('click', this.onForward.bind(this))
     })
   }
+
+  setTargetInstance(instance) {
+    this.targetInstance = instance
+  }
 }
 
 class App {
@@ -137,6 +151,7 @@ class App {
 
     start.displayNewSection()
     start.createCategories()
+    start.setTargetInstance(gameplay)
   }
 }
 
