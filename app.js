@@ -7,6 +7,13 @@ function getElement(el) {
 class Gameplay {
   constructor() {
     this.answerContainer = getElement('.answer-letters')
+    this.points = {
+      health: 8,
+    }
+  }
+
+  randomQuestion(count) {
+    return Math.floor(Math.random() * count)
   }
 
   data(data) {
@@ -14,14 +21,19 @@ class Gameplay {
     console.log(this.data)
   }
 
-  chooseCategory(category) {
-    this.category = category[0].toUpperCase() + category.slice(1)
-    console.log(this.category)
-    this.generateAnswer()
+  chooseQuestion(category) {
+    const cat = Object.entries(this.data)
+    let quest = []
+    for (const c of cat) {
+      if (c[0].toLocaleLowerCase() === category) quest = c
+    }
+
+    const randomQuest = this.randomQuestion(quest[1].length)
+    this.generateAnswer(quest[1][randomQuest].name)
   }
 
-  generateAnswer() {
-    const words = this.category.split(' ')
+  generateAnswer(answer) {
+    const words = answer.split(' ')
 
     let displayAnswer = words.map(word => {
       return `<li>${word
@@ -103,8 +115,9 @@ class Navigation {
   }
 
   onForward(e) {
-    if (e.target.classList.contains('category'))
-      this.targetInstance.chooseCategory(e.target.textContent.toLowerCase())
+    if (e.target.classList.contains('category')) {
+      this.targetInstance.chooseQuestion(e.target.textContent.toLowerCase())
+    }
 
     this.hideCurrentSection(-100)
 
