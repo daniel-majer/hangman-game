@@ -170,7 +170,9 @@ class App {
 
 App.init() /* main.style.height = `${h}px ` */
 
-/* .getBoundingClientRect().height */
+/* .getBoundingClientRect().height
+
+*/
 
 /*  setViewportHeight() {
     const main = getElement('main')  */
