@@ -7,39 +7,74 @@ function getElement(el) {
 class Gameplay {
   constructor() {
     this.answerContainer = getElement('.answer-letters')
-    this.points = {
-      health: 8,
-    }
+    this.letters = document.querySelectorAll('.alphabet-letters li')
+
+    this.health = 8
+    this.answer
+    this.categories
+
+    this.letters.forEach(l => {
+      l.addEventListener('click', this.guessLetter.bind(this))
+    })
   }
 
-  randomQuestion(count) {
-    return Math.floor(Math.random() * count)
+  guessLetter(e) {
+    const answer = this.answer.toLowerCase()
+    console.log(answer)
+    const clickedLetter = e.target.innerText.toLowerCase()
+
+    if (answer.includes(clickedLetter)) {
+      let indexAnswerLetter = []
+      for (const [i, char] of [...answer].entries()) {
+        if (char === clickedLetter) indexAnswerLetter.push(i)
+      }
+
+      let letterContainer = Array.from(
+        this.answerContainer.querySelectorAll('.card')
+      )
+
+      letterContainer = letterContainer.filter((_, i) =>
+        indexAnswerLetter.includes(i)
+      )
+      letterContainer.forEach(letter => {
+        letter.classList.add('turn')
+      })
+      e.target.style.backgroundColor = '#ffffff50'
+
+      return console.log(clickedLetter, indexAnswerLetter, letterContainer)
+    }
+    e.target.style.backgroundColor = '#ffffff50'
   }
 
   data(data) {
-    this.data = data
-    console.log(this.data)
+    this.categories = data
   }
 
-  chooseQuestion(category) {
-    const cat = Object.entries(this.data)
-    let quest = []
+  chooseCategory(category) {
+    const cat = Object.entries(this.categories)
+    this.answer = []
     for (const c of cat) {
-      if (c[0].toLocaleLowerCase() === category) quest = c
+      if (c[0].toLocaleLowerCase() === category) this.answer = c
     }
 
-    const randomQuest = this.randomQuestion(quest[1].length)
-    this.generateAnswer(quest[1][randomQuest].name)
+    const random = Math.floor(Math.random() * this.answer[1].length)
+    this.answer = this.answer[1][random].name
+    this.generateAnswer()
   }
 
-  generateAnswer(answer) {
-    const words = answer.split(' ')
+  generateAnswer() {
+    const words = this.answer.split(' ')
 
     let displayAnswer = words.map(word => {
       return `<li>${word
         .split('')
         .map(w => {
-          return `<span>${w.toUpperCase()}</span>`
+          return `<div class="card-container">
+                    <div class="card">
+                              <span class="front"></span>
+                              <span class="back">${w.toUpperCase()}</span>
+                    </div>
+                  </div>`
         })
         .join('')}</li>`
     })
@@ -116,7 +151,7 @@ class Navigation {
 
   onForward(e) {
     if (e.target.classList.contains('category')) {
-      this.targetInstance.chooseQuestion(e.target.textContent.toLowerCase())
+      this.targetInstance.chooseCategory(e.target.textContent.toLowerCase())
     }
 
     this.hideCurrentSection(-100)
