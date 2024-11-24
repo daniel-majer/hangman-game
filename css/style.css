@@ -336,7 +336,6 @@ progress {
   transform: rotateY(180deg);
 }
 
-
 .alphabet ul {
   display: flex;
   flex-wrap: wrap;
@@ -357,7 +356,7 @@ progress {
 .alphabet li:hover,
 .alphabet li:active {
   color: #fff;
-  background-color: #2463ff;
+  background-color: #2463ff !important;
 }
 
 /* MODAL */

@@ -6,8 +6,9 @@ function getElement(el) {
 
 class Gameplay {
   constructor() {
-    this.answerContainer = getElement('.answer-letters')
-    this.letters = document.querySelectorAll('.alphabet-letters li')
+    this.answerContainers = getElement('.answer-letters')
+    /*     this.words = document.querySelectorAll('.answer-letters li')
+     */ this.letters = document.querySelectorAll('.alphabet-letters li')
 
     this.health = 8
     this.answer
@@ -19,30 +20,33 @@ class Gameplay {
   }
 
   guessLetter(e) {
-    const answer = this.answer.toLowerCase()
-    console.log(answer)
     const clickedLetter = e.target.innerText.toLowerCase()
+    const answerBox =
+      this.answerContainers.querySelectorAll('.answer-letters li')
 
-    if (answer.includes(clickedLetter)) {
-      let indexAnswerLetter = []
-      for (const [i, char] of [...answer].entries()) {
-        if (char === clickedLetter) indexAnswerLetter.push(i)
+    answerBox.forEach(li => {
+      const word = li.dataset.set
+
+      if (word.includes(clickedLetter)) {
+        let indexAnswerLetter = []
+
+        for (const [i, char] of [...word].entries()) {
+          if (char === clickedLetter) indexAnswerLetter.push(i)
+        }
+
+        let cards = Array.from(li.querySelectorAll('.card')).filter((_, i) =>
+          indexAnswerLetter.includes(i)
+        )
+
+        cards.forEach(letter => {
+          letter.classList.add('turn')
+        })
+        e.target.style.backgroundColor = '#ffffff50'
+
+        console.log(indexAnswerLetter, cards)
       }
+    })
 
-      let letterContainer = Array.from(
-        this.answerContainer.querySelectorAll('.card')
-      )
-
-      letterContainer = letterContainer.filter((_, i) =>
-        indexAnswerLetter.includes(i)
-      )
-      letterContainer.forEach(letter => {
-        letter.classList.add('turn')
-      })
-      e.target.style.backgroundColor = '#ffffff50'
-
-      return console.log(clickedLetter, indexAnswerLetter, letterContainer)
-    }
     e.target.style.backgroundColor = '#ffffff50'
   }
 
@@ -58,15 +62,16 @@ class Gameplay {
     }
 
     const random = Math.floor(Math.random() * this.answer[1].length)
-    this.answer = this.answer[1][random].name
+    this.answer = this.answer[1][random].name /* 'RetUrn n of returnO' */
+    this.letters.forEach(l => (l.style.backgroundColor = '#fff'))
     this.generateAnswer()
   }
 
   generateAnswer() {
     const words = this.answer.split(' ')
-
+    console.log(words)
     let displayAnswer = words.map(word => {
-      return `<li>${word
+      return `<li data-set='${word.toLowerCase()}'>${word
         .split('')
         .map(w => {
           return `<div class="card-container">
@@ -79,7 +84,7 @@ class Gameplay {
         .join('')}</li>`
     })
     displayAnswer = displayAnswer.join('')
-    this.answerContainer.innerHTML = displayAnswer
+    this.answerContainers.innerHTML = displayAnswer
   }
 }
 
