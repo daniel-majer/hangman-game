@@ -88,7 +88,7 @@
             <h1>Capital Cities</h1>
           </div>
           <div>
-            <progress max="100" value="70"></progress>
+            <progress max="80" value="80"></progress>
             <img src="./images/icon-heart.svg" alt="Heart">
           </div>
         </header>
@@ -129,10 +129,19 @@
         </ul>
       </div>
 
-      <div class="modal-overlay hidden">
+      <div class="paused hidden">
         <div class="modal-content">
           <h1 class="title" stroke-text="Paused">Paused</h1>
           <button class="button continue">Continue</button>
+          <button class="button back-btn new">New category</button>
+          <button class="button back-btn quit">Quit game</button>
+        </div>
+      </div>
+
+      <div class="lose hidden">
+        <div class="modal-content">
+          <h1 class="title" stroke-text="You Lose">You Lose</h1>
+          <button class="button continue">Play Again!</button>
           <button class="button back-btn new">New category</button>
           <button class="button back-btn quit">Quit game</button>
         </div>

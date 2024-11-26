@@ -353,14 +353,21 @@ progress {
   transition: var(--transition);
   cursor: pointer;
 }
+
+.alphabet li.clicked,
+.alphabet li:hover.clicked {
+  background-color: #ffffff50;
+}
+
 .alphabet li:hover,
 .alphabet li:active {
   color: #fff;
-  background-color: #2463ff !important;
+  background-color: #2463ff;
 }
 
 /* MODAL */
-.modal-overlay {
+.paused,
+.lose {
   width: 100%;
   height: 100%;
   position: fixed;
@@ -417,7 +424,8 @@ progress {
   left: 50%;
   transform: translateX(-50%);
 }
-.modal-overlay .title {
+.paused .title,
+.lose .title {
   font-size: 136px;
   background-clip: text;
   -webkit-background-clip: text;
@@ -452,7 +460,8 @@ progress {
   box-shadow: inset 0 -3px 0 3px #b643b6, inset 0 0 0 5px #fe71fe;
 }
 
-.modal-overlay.hidden {
+.paused.hidden,
+.lose.hidden {
   opacity: 0;
   z-index: -999;
   visibility: hidden;
@@ -742,7 +751,8 @@ progress {
     border-radius: 50px;
     padding: 80px 0 40px;
   }
-  .modal-overlay .title {
+  .paused .title,
+  .lose .title {
     font-size: 96px;
     top: -60px;
   }

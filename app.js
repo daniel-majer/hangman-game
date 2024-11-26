@@ -7,47 +7,57 @@ function getElement(el) {
 class Gameplay {
   constructor() {
     this.answerContainers = getElement('.answer-letters')
-    /*     this.words = document.querySelectorAll('.answer-letters li')
-     */ this.letters = document.querySelectorAll('.alphabet-letters li')
+    this.progressBar = getElement('progress')
+    this.letters = document.querySelectorAll('.alphabet-letters li')
 
     this.health = 8
-    this.answer
-    this.categories
 
     this.letters.forEach(l => {
-      l.addEventListener('click', this.guessLetter.bind(this))
+      l.addEventListener('click', this.onClickLetter.bind(this))
     })
   }
 
-  guessLetter(e) {
+  handleProgressBar(clicked) {
+    if (!this.answer.includes(clicked)) this.progressBar.value -= 10
+    if (this.progressBar.value <= 0) {
+      this.modalLose.classList.remove('hidden')
+    }
+  }
+
+  checkMatchLetter(wordEl, clicked) {
+    const word = wordEl.dataset.set
+
+    if (word.includes(clicked)) {
+      let indexAnswerLetter = []
+
+      for (const [i, char] of [...word].entries()) {
+        if (char === clicked) indexAnswerLetter.push(i)
+      }
+
+      let cards = Array.from(wordEl.querySelectorAll('.card')).filter((_, i) =>
+        indexAnswerLetter.includes(i)
+      )
+
+      cards.forEach(letter => {
+        letter.classList.add('turn')
+      })
+    }
+  }
+
+  onClickLetter(e) {
+    if (e.target.classList.contains('clicked')) return
+
     const clickedLetter = e.target.innerText.toLowerCase()
-    const answerBox =
+    const wordElement =
       this.answerContainers.querySelectorAll('.answer-letters li')
 
-    answerBox.forEach(li => {
-      const word = li.dataset.set
+    this.handleProgressBar(clickedLetter)
 
-      if (word.includes(clickedLetter)) {
-        let indexAnswerLetter = []
-
-        for (const [i, char] of [...word].entries()) {
-          if (char === clickedLetter) indexAnswerLetter.push(i)
-        }
-
-        let cards = Array.from(li.querySelectorAll('.card')).filter((_, i) =>
-          indexAnswerLetter.includes(i)
-        )
-
-        cards.forEach(letter => {
-          letter.classList.add('turn')
-        })
-        e.target.style.backgroundColor = '#ffffff50'
-
-        console.log(indexAnswerLetter, cards)
-      }
+    wordElement.forEach(word => {
+      this.checkMatchLetter(word, clickedLetter)
     })
 
-    e.target.style.backgroundColor = '#ffffff50'
+    e.target.classList.add('clicked')
   }
 
   data(data) {
@@ -56,22 +66,24 @@ class Gameplay {
 
   chooseCategory(category) {
     const cat = Object.entries(this.categories)
-    this.answer = []
+
+    let answer = []
     for (const c of cat) {
-      if (c[0].toLocaleLowerCase() === category) this.answer = c
+      if (c[0].toLowerCase() === category.toLowerCase()) answer = c
     }
 
-    const random = Math.floor(Math.random() * this.answer[1].length)
-    this.answer = this.answer[1][random].name /* 'RetUrn n of returnO' */
-    this.letters.forEach(l => (l.style.backgroundColor = '#fff'))
-    this.generateAnswer()
+    const random = Math.floor(Math.random() * answer[1].length)
+
+    answer = answer[1][random].name.toLowerCase()
+    this.answer = answer
+    this.generateAnswer(answer)
   }
 
-  generateAnswer() {
-    const words = this.answer.split(' ')
-    console.log(words)
+  generateAnswer(answer) {
+    const words = answer.split(' ')
+    console.log(...words)
     let displayAnswer = words.map(word => {
-      return `<li data-set='${word.toLowerCase()}'>${word
+      return `<li data-set='${word}'>${word
         .split('')
         .map(w => {
           return `<div class="card-container">
@@ -99,7 +111,8 @@ class Navigation {
     /* BUTTONS */
     this.forwardBtn = document.querySelectorAll('.forward-btn')
     this.backBtn = document.querySelectorAll('.back-btn')
-    this.modalOverlay = getElement('.modal-overlay')
+    this.modalPaused = getElement('.paused')
+    this.modalLose = getElement('.lose')
     this.modalBtn = getElement('.modal')
 
     /* EVENTS */
@@ -109,20 +122,20 @@ class Navigation {
     this.backBtn.forEach(btn => {
       btn.addEventListener('click', this.onBack.bind(this))
     })
-    this.modalOverlay.addEventListener('click', this.closeModal.bind(this))
+    this.modalPaused.addEventListener('click', this.closeModal.bind(this))
     this.modalBtn.addEventListener('click', this.openModal.bind(this))
   }
 
   closeModal(e) {
-    const targetClasses = ['continue', 'modal-overlay', 'new', 'quit']
+    const targetClasses = ['continue', 'paused', 'lose', 'new', 'quit']
 
     if (targetClasses.some(cls => e.target.classList.contains(cls))) {
-      this.modalOverlay.classList.add('hidden')
+      this.modalPaused.classList.add('hidden')
     }
   }
 
   openModal() {
-    this.modalOverlay.classList.remove('hidden')
+    this.modalPaused.classList.remove('hidden')
   }
 
   hideCurrentSection(numb) {
