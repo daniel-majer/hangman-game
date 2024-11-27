@@ -9,6 +9,7 @@ class Gameplay {
     this.answerContainers = getElement('.answer-letters')
     this.progressBar = getElement('progress')
     this.letters = document.querySelectorAll('.alphabet-letters li')
+    this.modalLose = getElement('.lose')
 
     this.health = 8
 
@@ -18,10 +19,8 @@ class Gameplay {
   }
 
   handleProgressBar(clicked) {
+    if (this.progressBar.value <= 0) this.modalLose.classList.remove('hidden')
     if (!this.answer.includes(clicked)) this.progressBar.value -= 10
-    if (this.progressBar.value <= 0) {
-      this.modalLose.classList.remove('hidden')
-    }
   }
 
   checkMatchLetter(wordEl, clicked) {
@@ -66,6 +65,11 @@ class Gameplay {
 
   chooseCategory(category) {
     const cat = Object.entries(this.categories)
+    this.letters.forEach(letter =>
+      letter.classList.contains('clicked')
+        ? letter.classList.remove('clicked')
+        : ''
+    )
 
     let answer = []
     for (const c of cat) {
@@ -110,29 +114,47 @@ class Navigation {
 
     /* BUTTONS */
     this.forwardBtn = document.querySelectorAll('.forward-btn')
-    this.backBtn = document.querySelectorAll('.back-btn')
+    this.moveBack = document.querySelectorAll('.back-btn')
+    this.openModalBtn = getElement('.modal-btn')
     this.modalPaused = getElement('.paused')
     this.modalLose = getElement('.lose')
-    this.modalBtn = getElement('.modal')
 
     /* EVENTS */
     this.forwardBtn.forEach(btn => {
       btn.addEventListener('click', this.onForward.bind(this))
     })
-    this.backBtn.forEach(btn => {
+    this.moveBack.forEach(btn => {
       btn.addEventListener('click', this.onBack.bind(this))
     })
-    this.modalPaused.addEventListener('click', this.closeModal.bind(this))
-    this.modalBtn.addEventListener('click', this.openModal.bind(this))
+    /*   this.modalPaused.addEventListener('click', this.closeModal.bind(this))
+    this.modalLose.addEventListener('click', this.closeModal.bind(this)) */
+    this.openModalBtn.addEventListener('click', this.openModal.bind(this))
+
+    /*     this.modal = document.querySelectorAll('.modal')
+    this.modal.forEach(mod => {
+      mod.addEventListener('click', this.handleModal.bind(this))
+    }) */
   }
 
-  closeModal(e) {
+  /*   closeModal(e) {
     const targetClasses = ['continue', 'paused', 'lose', 'new', 'quit']
 
     if (targetClasses.some(cls => e.target.classList.contains(cls))) {
       this.modalPaused.classList.add('hidden')
     }
-  }
+  } */
+
+  /*   handleModal(e) {
+    if (e.target.classList.contains('new')) {
+      this.newSection = this.categoriesSection
+      e.currentTarget.classList.add('hidden')
+
+      this.newSection.dataset.set = 'current'
+      this.displayNewSection()
+    }
+
+    console.log('hey')
+  } */
 
   openModal() {
     this.modalPaused.classList.remove('hidden')
@@ -153,16 +175,25 @@ class Navigation {
   }
 
   onBack(e) {
-    let newSection
     this.hideCurrentSection(100)
 
-    if (e.target.classList.contains('back-btn')) newSection = this.menuSection
-    if (e.target.classList.contains('new')) newSection = this.categoriesSection
-    if (e.target.classList.contains('modal')) return
-    if (e.target.classList.contains('quit'))
-      this.categoriesSection.style.transform = 'translateX(100%)'
+    if (e.target.classList.contains('move-back'))
+      this.newSection = this.menuSection
 
-    newSection.dataset.set = 'current'
+    if (e.target.classList.contains('new')) {
+      this.newSection = this.categoriesSection
+      e.target.closest('.modal').classList.add('hidden')
+    }
+
+    if (e.target.classList.contains('quit')) {
+      this.categoriesSection.style.transform = 'translateX(100%)'
+      this.modalPaused.classList.add('hidden')
+    }
+
+    /*    if (e.target.classList.contains('modal')) return
+     */
+
+    this.newSection.dataset.set = 'current'
 
     this.displayNewSection()
   }

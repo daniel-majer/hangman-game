@@ -245,7 +245,7 @@ section {
   align-items: center;
   column-gap: 40px;
 }
-.gameplay .modal {
+.gameplay .modal-btn {
   position: relative;
 }
 .gameplay h1 {
