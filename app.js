@@ -10,6 +10,7 @@ class Gameplay {
     this.progressBar = getElement('progress')
     this.letters = document.querySelectorAll('.alphabet-letters li')
     this.modalLose = getElement('.lose')
+    this.categoryHeader = getElement('.gameplay h1')
 
     this.health = 8
 
@@ -18,9 +19,10 @@ class Gameplay {
     })
   }
 
-  handleProgressBar(clicked) {
+  handleProgressBar() {
+    this.progressBar.value -= 10
     if (this.progressBar.value <= 0) this.modalLose.classList.remove('hidden')
-    if (!this.answer.includes(clicked)) this.progressBar.value -= 10
+    console.log(this.progressBar.value)
   }
 
   checkMatchLetter(wordEl, clicked) {
@@ -50,7 +52,7 @@ class Gameplay {
     const wordElement =
       this.answerContainers.querySelectorAll('.answer-letters li')
 
-    this.handleProgressBar(clickedLetter)
+    if (!this.answer.includes(clickedLetter)) this.handleProgressBar()
 
     wordElement.forEach(word => {
       this.checkMatchLetter(word, clickedLetter)
@@ -63,28 +65,38 @@ class Gameplay {
     this.categories = data
   }
 
-  chooseCategory(category) {
-    const cat = Object.entries(this.categories)
+  resetData() {
     this.letters.forEach(letter =>
       letter.classList.contains('clicked')
         ? letter.classList.remove('clicked')
         : ''
     )
 
-    let answer = []
-    for (const c of cat) {
-      if (c[0].toLowerCase() === category.toLowerCase()) answer = c
-    }
-
-    const random = Math.floor(Math.random() * answer[1].length)
-
-    answer = answer[1][random].name.toLowerCase()
-    this.answer = answer
-    this.generateAnswer(answer)
+    this.progressBar.value = '80'
   }
 
-  generateAnswer(answer) {
-    const words = answer.split(' ')
+  chooseCategory(category) {
+    const cat = Object.entries(this.categories)
+
+    this.letters.forEach(l =>
+      l.classList.contains('clicked') ? this.resetData() : ''
+    )
+
+    /* let answer = [] */
+    for (const c of cat) {
+      if (c[0].toLowerCase() === category.toLowerCase()) this.answer = c
+    }
+
+   this.categoryHeader.textContent = this.answer[0]
+
+    const random = Math.floor(Math.random() * this.answer[1].length)
+
+    this.answer = this.answer[1][random].name.toLowerCase()
+    this.generateAnswer()
+  }
+
+  generateAnswer() {
+    const words = this.answer.split(' ')
     console.log(...words)
     let displayAnswer = words.map(word => {
       return `<li data-set='${word}'>${word
@@ -106,58 +118,22 @@ class Gameplay {
 
 class Navigation {
   constructor() {
-    /* SECTIONS */
     this.menuSection = getElement('.main-menu')
     this.instructionsSection = getElement('.instructions')
     this.categoriesSection = getElement('.categories')
     this.gamePlaySection = getElement('.gameplay')
+    this.sections = document.querySelectorAll('section')
 
-    /* BUTTONS */
     this.forwardBtn = document.querySelectorAll('.forward-btn')
-    this.moveBack = document.querySelectorAll('.back-btn')
-    this.openModalBtn = getElement('.modal-btn')
     this.modalPaused = getElement('.paused')
-    this.modalLose = getElement('.lose')
 
     /* EVENTS */
     this.forwardBtn.forEach(btn => {
       btn.addEventListener('click', this.onForward.bind(this))
     })
-    this.moveBack.forEach(btn => {
-      btn.addEventListener('click', this.onBack.bind(this))
+    this.sections.forEach(btn => {
+      btn.addEventListener('click', this.handleSection.bind(this))
     })
-    /*   this.modalPaused.addEventListener('click', this.closeModal.bind(this))
-    this.modalLose.addEventListener('click', this.closeModal.bind(this)) */
-    this.openModalBtn.addEventListener('click', this.openModal.bind(this))
-
-    /*     this.modal = document.querySelectorAll('.modal')
-    this.modal.forEach(mod => {
-      mod.addEventListener('click', this.handleModal.bind(this))
-    }) */
-  }
-
-  /*   closeModal(e) {
-    const targetClasses = ['continue', 'paused', 'lose', 'new', 'quit']
-
-    if (targetClasses.some(cls => e.target.classList.contains(cls))) {
-      this.modalPaused.classList.add('hidden')
-    }
-  } */
-
-  /*   handleModal(e) {
-    if (e.target.classList.contains('new')) {
-      this.newSection = this.categoriesSection
-      e.currentTarget.classList.add('hidden')
-
-      this.newSection.dataset.set = 'current'
-      this.displayNewSection()
-    }
-
-    console.log('hey')
-  } */
-
-  openModal() {
-    this.modalPaused.classList.remove('hidden')
   }
 
   hideCurrentSection(numb) {
@@ -166,33 +142,45 @@ class Navigation {
   }
 
   displayNewSection() {
-    const sections = document.querySelectorAll('section')
-
-    this.currentSec = Array.from(sections).find(
+    this.currentSec = Array.from(this.sections).find(
       sec => sec.dataset.set === 'current'
     )
     this.currentSec.style.transform = 'translateX(0)'
   }
 
-  onBack(e) {
-    this.hideCurrentSection(100)
+  handleSection(e) {
+    const arrSections = ['main-menu', 'instructions', 'categories', 'gameplay']
+    if (arrSections.some(sec => e.target.classList.contains(sec))) return
 
-    if (e.target.classList.contains('move-back'))
+    if (e.target.classList.contains('modal-btn'))
+      this.modalPaused.classList.remove('hidden')
+
+    if (e.target.classList.contains('step-back'))
       this.newSection = this.menuSection
 
-    if (e.target.classList.contains('new')) {
+    if (e.target.classList.contains('new-category')) {
       this.newSection = this.categoriesSection
       e.target.closest('.modal').classList.add('hidden')
     }
 
-    if (e.target.classList.contains('quit')) {
+    if (e.target.classList.contains('quit-game')) {
+      this.newSection = this.menuSection
       this.categoriesSection.style.transform = 'translateX(100%)'
-      this.modalPaused.classList.add('hidden')
+      e.target.closest('.modal').classList.add('hidden')
     }
 
-    /*    if (e.target.classList.contains('modal')) return
-     */
+    if (e.target.classList.contains('again')) {
+      e.target.closest('.modal').classList.add('hidden')
+      this.targetInstance.chooseCategory(this.category)
+    }
 
+    if (
+      e.target.classList.contains('continue') ||
+      e.target.classList.contains('modal')
+    )
+      e.target.closest('.modal').classList.add('hidden')
+
+    this.hideCurrentSection(100)
     this.newSection.dataset.set = 'current'
 
     this.displayNewSection()
@@ -200,18 +188,19 @@ class Navigation {
 
   onForward(e) {
     if (e.target.classList.contains('category')) {
-      this.targetInstance.chooseCategory(e.target.textContent.toLowerCase())
+      this.category = e.target.textContent.toLowerCase()
+      this.targetInstance.chooseCategory(this.category)
     }
 
     this.hideCurrentSection(-100)
 
-    const newSection =
+    this.newSection =
       (e.target.classList.contains('play') && this.categoriesSection) ||
       (e.target.classList.contains('how-to-play') &&
         this.instructionsSection) ||
       (e.target.classList.contains('category') && this.gamePlaySection)
 
-    newSection.dataset.set = 'current'
+    this.newSection.dataset.set = 'current'
     this.displayNewSection()
   }
 

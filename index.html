@@ -26,7 +26,7 @@
 
     <section class="instructions">
       <div>
-        <button class="circle-btn back-btn">
+        <button class="circle-btn step-back">
           <svg>
             <use xlink:href="./images/icons.svg#back" />
           </svg>
@@ -64,7 +64,7 @@
 
     <section class="categories">
       <div>
-        <button class="circle-btn back-btn move-back">
+        <button class="circle-btn step-back">
           <svg>
             <use xlink:href="./images/icons.svg#back" />
           </svg>
@@ -85,7 +85,7 @@
                 <use xlink:href="./images/icons.svg#modal" />
               </svg>
             </button>
-            <h1>Capital Cities</h1>
+            <h1></h1>
           </div>
           <div>
             <progress max="80" value="80"></progress>
@@ -132,18 +132,18 @@
       <div class="modal paused hidden">
         <div class="modal-content">
           <h1 class="title" stroke-text="Paused">Paused</h1>
-          <button class="button continue">Continue</button>
-          <button class="button back-btn new">New category</button>
-          <button class="button back-btn quit">Quit game</button>
+          <button class="continue">Continue</button>
+          <button class="new-category">New category</button>
+          <button class="quit-game">Quit game</button>
         </div>
       </div>
 
       <div class="modal lose hidden">
         <div class="modal-content">
           <h1 class="title" stroke-text="You Lose">You Lose</h1>
-          <button class="button again">Play Again!</button>
-          <button class="button back-btn new">New category</button>
-          <button class="button back-btn quit">Quit game</button>
+          <button class="again">Play Again!</button>
+          <button class="new-category">New category</button>
+          <button class="quit-game">Quit game</button>
         </div>
       </div>
     </section>
