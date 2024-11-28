@@ -9,7 +9,8 @@ class Gameplay {
     this.answerContainers = getElement('.answer-letters')
     this.progressBar = getElement('progress')
     this.letters = document.querySelectorAll('.alphabet-letters li')
-    this.modalLose = getElement('.lose')
+    this.modalLoseWin = getElement('.lose')
+    this.modalTitle = getElement('.lose h1')
     this.categoryHeader = getElement('.gameplay h1')
 
     this.health = 8
@@ -21,8 +22,11 @@ class Gameplay {
 
   handleProgressBar() {
     this.progressBar.value -= 10
-    if (this.progressBar.value <= 0) this.modalLose.classList.remove('hidden')
-    console.log(this.progressBar.value)
+    if (this.progressBar.value <= 0) {
+      this.modalLoseWin.classList.remove('hidden')
+      this.modalTitle.textContent = 'You Lose'
+      this.modalTitle.setAttribute('stroke-text', 'You Lose')
+    }
   }
 
   checkMatchLetter(wordEl, clicked) {
@@ -43,13 +47,24 @@ class Gameplay {
         letter.classList.add('turn')
       })
     }
+
+    const isComplete = [...this.cards].every(card =>
+      card.classList.contains('turn')
+    )
+
+    if (isComplete) {
+      this.modalLoseWin.classList.remove('hidden')
+      this.modalTitle.textContent = 'You Win'
+      this.modalTitle.setAttribute('stroke-text', 'You Win')
+    }
   }
 
   onClickLetter(e) {
     if (e.target.classList.contains('clicked')) return
 
     const clickedLetter = e.target.innerText.toLowerCase()
-    const wordElement =
+    /*     console.log(clickedLetter, this.answer)
+     */ const wordElement =
       this.answerContainers.querySelectorAll('.answer-letters li')
 
     if (!this.answer.includes(clickedLetter)) this.handleProgressBar()
@@ -87,7 +102,7 @@ class Gameplay {
       if (c[0].toLowerCase() === category.toLowerCase()) this.answer = c
     }
 
-   this.categoryHeader.textContent = this.answer[0]
+    this.categoryHeader.textContent = this.answer[0]
 
     const random = Math.floor(Math.random() * this.answer[1].length)
 
@@ -113,6 +128,7 @@ class Gameplay {
     })
     displayAnswer = displayAnswer.join('')
     this.answerContainers.innerHTML = displayAnswer
+    this.cards = document.querySelectorAll('.card')
   }
 }
 
@@ -176,7 +192,7 @@ class Navigation {
 
     if (
       e.target.classList.contains('continue') ||
-      e.target.classList.contains('modal')
+      e.target.classList.contains('paused')
     )
       e.target.closest('.modal').classList.add('hidden')
 

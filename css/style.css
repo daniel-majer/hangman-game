@@ -264,6 +264,7 @@ progress::-webkit-progress-bar {
 progress::-webkit-progress-value {
   background-color: #140e66;
   border-radius: 20px;
+  transition: var(--transition);
 }
 /* Firefox */
 progress::-moz-progress-bar {
