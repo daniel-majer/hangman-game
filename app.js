@@ -11,7 +11,9 @@ class Gameplay {
     this.letters = document.querySelectorAll('.alphabet-letters li')
     this.modalLoseWin = getElement('.lose')
     this.modalTitle = getElement('.lose h1')
+    this.modalPaused = getElement('.paused')
     this.categoryHeader = getElement('.gameplay h1')
+    this.timer = getElement('#timer')
 
     this.health = 8
 
@@ -20,12 +22,40 @@ class Gameplay {
     })
   }
 
+  endGame(state) {
+    this.modalLoseWin.classList.remove('hidden')
+    this.modalTitle.textContent = state
+    this.modalTitle.setAttribute('stroke-text', state)
+    clearInterval(this.interval)
+  }
+
+  formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60)
+    const remainingSeconds = seconds % 60
+    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`
+  }
+
+  startTimer(time) {
+    let leftTime = time || 60
+    this.timer.textContent = this.formatTime(leftTime)
+
+    if (this.interval) clearInterval(this.interval)
+
+    this.interval = setInterval(() => {
+      leftTime--
+      this.timer.textContent = this.formatTime(leftTime)
+
+      if (leftTime <= 0) {
+        clearInterval(this.interval)
+        this.endGame('You Lose')
+      }
+    }, 1000)
+  }
+
   handleProgressBar() {
     this.progressBar.value -= 10
     if (this.progressBar.value <= 0) {
-      this.modalLoseWin.classList.remove('hidden')
-      this.modalTitle.textContent = 'You Lose'
-      this.modalTitle.setAttribute('stroke-text', 'You Lose')
+      this.endGame('You Lose')
     }
   }
 
@@ -53,9 +83,7 @@ class Gameplay {
     )
 
     if (isComplete) {
-      this.modalLoseWin.classList.remove('hidden')
-      this.modalTitle.textContent = 'You Win'
-      this.modalTitle.setAttribute('stroke-text', 'You Win')
+      this.endGame('You Win')
     }
   }
 
@@ -63,8 +91,7 @@ class Gameplay {
     if (e.target.classList.contains('clicked')) return
 
     const clickedLetter = e.target.innerText.toLowerCase()
-    /*     console.log(clickedLetter, this.answer)
-     */ const wordElement =
+    const wordElement =
       this.answerContainers.querySelectorAll('.answer-letters li')
 
     if (!this.answer.includes(clickedLetter)) this.handleProgressBar()
@@ -108,6 +135,7 @@ class Gameplay {
 
     this.answer = this.answer[1][random].name.toLowerCase()
     this.generateAnswer()
+    this.startTimer()
   }
 
   generateAnswer() {
@@ -139,6 +167,7 @@ class Navigation {
     this.categoriesSection = getElement('.categories')
     this.gamePlaySection = getElement('.gameplay')
     this.sections = document.querySelectorAll('section')
+    this.buttons = document.querySelectorAll('button')
 
     this.forwardBtn = document.querySelectorAll('.forward-btn')
     this.modalPaused = getElement('.paused')
@@ -147,9 +176,21 @@ class Navigation {
     this.forwardBtn.forEach(btn => {
       btn.addEventListener('click', this.onForward.bind(this))
     })
-    this.sections.forEach(btn => {
+    this.buttons.forEach(btn => {
       btn.addEventListener('click', this.handleSection.bind(this))
     })
+    this.modalPaused.addEventListener('click', this.unPaused.bind(this))
+  }
+
+  unPaused(e) {
+    const leftSeconds = Number(getElement('#timer').textContent.split(':')[1])
+    this.targetInstance.startTimer(leftSeconds)
+
+    if (
+      e.target.classList.contains('continue') ||
+      e.target.classList.contains('paused')
+    )
+      return this.modalPaused.classList.add('hidden')
   }
 
   hideCurrentSection(numb) {
@@ -165,11 +206,10 @@ class Navigation {
   }
 
   handleSection(e) {
-    const arrSections = ['main-menu', 'instructions', 'categories', 'gameplay']
-    if (arrSections.some(sec => e.target.classList.contains(sec))) return
-
-    if (e.target.classList.contains('modal-btn'))
-      this.modalPaused.classList.remove('hidden')
+    if (e.target.classList.contains('modal-btn')) {
+      clearInterval(this.targetInstance.interval)
+      return this.modalPaused.classList.remove('hidden')
+    }
 
     if (e.target.classList.contains('step-back'))
       this.newSection = this.menuSection
@@ -189,12 +229,6 @@ class Navigation {
       e.target.closest('.modal').classList.add('hidden')
       this.targetInstance.chooseCategory(this.category)
     }
-
-    if (
-      e.target.classList.contains('continue') ||
-      e.target.classList.contains('paused')
-    )
-      e.target.closest('.modal').classList.add('hidden')
 
     this.hideCurrentSection(100)
     this.newSection.dataset.set = 'current'

@@ -277,6 +277,10 @@ progress {
   overflow: hidden;
 }
 
+#timer {
+  font-size: 52px;
+}
+
 .answer,
 .alphabet {
   width: 100%;
