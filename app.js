@@ -11,11 +11,15 @@ class Gameplay {
     this.letters = document.querySelectorAll('.alphabet-letters li')
     this.modalLoseWin = getElement('.lose')
     this.modalTitle = getElement('.lose h1')
-    this.modalPaused = getElement('.paused')
     this.categoryHeader = getElement('.gameplay h1')
     this.timer = getElement('#timer')
-
-    this.health = 8
+    this.answers = []
+    this.categories
+    this.playerStats = {
+      level: 1,
+      maxLevel: 3,
+      health: '80',
+    }
 
     this.letters.forEach(l => {
       l.addEventListener('click', this.onClickLetter.bind(this))
@@ -59,6 +63,44 @@ class Gameplay {
     }
   }
 
+  setData(data) {
+    this.categories = data
+  }
+
+  setProgressBar() {
+    this.progressBar.value = this.playerStats.health
+    this.progressBar.max = this.playerStats.health
+  }
+
+  resetData() {
+    this.letters.forEach(letter =>
+      letter.classList.contains('clicked')
+        ? letter.classList.remove('clicked')
+        : ''
+    )
+    this.setProgressBar()
+    this.playerStats.level = 1
+  }
+
+  checkFinish(complete) {
+    if (complete) {
+      this.playerStats.level += 1
+
+      if (this.playerStats.level === this.playerStats.maxLevel + 1)
+        return this.endGame('You Win')
+
+      setTimeout(() => {
+        this.setAnswer(this.category)
+
+        this.letters.forEach(letter =>
+          letter.classList.contains('clicked')
+            ? letter.classList.remove('clicked')
+            : ''
+        )
+      }, 1000)
+    }
+  }
+
   checkMatchLetter(wordEl, clicked) {
     const word = wordEl.dataset.set
 
@@ -69,73 +111,30 @@ class Gameplay {
         if (char === clicked) indexAnswerLetter.push(i)
       }
 
-      let cards = Array.from(wordEl.querySelectorAll('.card')).filter((_, i) =>
-        indexAnswerLetter.includes(i)
+      let rightCards = Array.from(wordEl.querySelectorAll('.card')).filter(
+        (_, i) => indexAnswerLetter.includes(i)
       )
-
-      cards.forEach(letter => {
+      rightCards.forEach(letter => {
         letter.classList.add('turn')
       })
     }
 
-    const isComplete = [...this.cards].every(card =>
+    const isFinish = [...this.cards].every(card =>
       card.classList.contains('turn')
     )
-
-    if (isComplete) {
-      this.endGame('You Win')
-    }
+    this.checkFinish(isFinish)
   }
 
   onClickLetter(e) {
     if (e.target.classList.contains('clicked')) return
+    e.target.classList.add('clicked')
 
     const clickedLetter = e.target.innerText.toLowerCase()
-    const wordElement =
-      this.answerContainers.querySelectorAll('.answer-letters li')
-
     if (!this.answer.includes(clickedLetter)) this.handleProgressBar()
 
-    wordElement.forEach(word => {
+    this.words.forEach(word => {
       this.checkMatchLetter(word, clickedLetter)
     })
-
-    e.target.classList.add('clicked')
-  }
-
-  data(data) {
-    this.categories = data
-  }
-
-  resetData() {
-    this.letters.forEach(letter =>
-      letter.classList.contains('clicked')
-        ? letter.classList.remove('clicked')
-        : ''
-    )
-
-    this.progressBar.value = '80'
-  }
-
-  chooseCategory(category) {
-    const cat = Object.entries(this.categories)
-
-    this.letters.forEach(l =>
-      l.classList.contains('clicked') ? this.resetData() : ''
-    )
-
-    /* let answer = [] */
-    for (const c of cat) {
-      if (c[0].toLowerCase() === category.toLowerCase()) this.answer = c
-    }
-
-    this.categoryHeader.textContent = this.answer[0]
-
-    const random = Math.floor(Math.random() * this.answer[1].length)
-
-    this.answer = this.answer[1][random].name.toLowerCase()
-    this.generateAnswer()
-    this.startTimer()
   }
 
   generateAnswer() {
@@ -157,6 +156,31 @@ class Gameplay {
     displayAnswer = displayAnswer.join('')
     this.answerContainers.innerHTML = displayAnswer
     this.cards = document.querySelectorAll('.card')
+    this.words = this.answerContainers.querySelectorAll('.answer-letters li')
+  }
+  setTitle() {
+    this.categoryHeader.textContent = `${this.category} ${this.playerStats.level}/${this.playerStats.maxLevel}`
+  }
+
+  setAnswer(category) {
+    const categories = Object.entries(this.categories)
+
+    for (const c of categories) {
+      if (c[0].toLowerCase() === category.toLowerCase())
+        [this.category, this.answers] = c
+    }
+
+    const randomNumb = Math.floor(Math.random() * this.answers.length)
+    this.answer = this.answers[randomNumb].name.toLowerCase()
+
+    this.setTitle()
+    this.generateAnswer()
+    this.startTimer()
+  }
+
+  setCategory(category) {
+    this.setProgressBar()
+    this.setAnswer(category)
   }
 }
 
@@ -180,6 +204,8 @@ class Navigation {
       btn.addEventListener('click', this.handleSection.bind(this))
     })
     this.modalPaused.addEventListener('click', this.unPaused.bind(this))
+
+    this.setHeightSections()
   }
 
   unPaused(e) {
@@ -216,6 +242,7 @@ class Navigation {
 
     if (e.target.classList.contains('new-category')) {
       this.newSection = this.categoriesSection
+      this.targetInstance.resetData()
       e.target.closest('.modal').classList.add('hidden')
     }
 
@@ -227,19 +254,19 @@ class Navigation {
 
     if (e.target.classList.contains('again')) {
       e.target.closest('.modal').classList.add('hidden')
-      this.targetInstance.chooseCategory(this.category)
+      this.targetInstance.resetData()
+      this.targetInstance.setAnswer(this.category)
     }
 
     this.hideCurrentSection(100)
     this.newSection.dataset.set = 'current'
-
     this.displayNewSection()
   }
 
   onForward(e) {
     if (e.target.classList.contains('category')) {
       this.category = e.target.textContent.toLowerCase()
-      this.targetInstance.chooseCategory(this.category)
+      this.targetInstance.setCategory(this.category)
     }
 
     this.hideCurrentSection(-100)
@@ -259,7 +286,7 @@ class Navigation {
     if (!response.ok) throw new Error('Network response was not ok')
 
     const { categories } = await response.json()
-    this.targetInstance.data(categories)
+    this.targetInstance.setData(categories)
 
     const keys = Object.keys(categories)
 
@@ -278,6 +305,19 @@ class Navigation {
   setTargetInstance(instance) {
     this.targetInstance = instance
   }
+
+  setHeightSections() {
+    const elements = Array.from(this.sections)
+    const heights = elements.map(
+      element => element.getBoundingClientRect().height
+    )
+
+    const maxHeight = Math.max(...heights)
+
+    elements.forEach(element => {
+      element.style.height = `${maxHeight}px`
+    })
+  }
 }
 
 class App {
@@ -291,19 +331,4 @@ class App {
   }
 }
 
-App.init() /* main.style.height = `${h}px ` */
-
-/* .getBoundingClientRect().height
-
-*/
-
-/*  setViewportHeight() {
-    const main = getElement('main')  */
-/*     const h = this.currentSec.getBoundingClientRect().height
- */
-
-/*     document.querySelectorAll('section').forEach(s => {
-      s.style.height = `  ${h}px`
-    }) */
-/*   }
-} */
+App.init()
