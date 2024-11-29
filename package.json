@@ -11,5 +11,8 @@
   "license": "ISC",
   "devDependencies": {
     "parcel": "latest"
+  },
+  "dependencies": {
+    "core-js": "^3.39.0"
   }
 }
