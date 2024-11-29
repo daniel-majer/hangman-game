@@ -1,6 +1,6 @@
 import { getElement } from './helper.js'
-import data from '../public/data/data.json' with { type: 'json' }
-
+/* import data from '../public/data/data.json' assert { type: 'json' }
+ */
 export class Controller {
   constructor() {
     this.menuSection = getElement('.main-menu')
@@ -60,14 +60,15 @@ export class Controller {
 
     if (e.target.classList.contains('new-category')) {
       this.newSection = this.categoriesSection
-      this.targetInstance.resetData()
-      e.target.closest('.modal').classList.add('hidden')
+      this.targetInstance.resetData(e.target)
+      /*       e.target.closest('.modal').classList.add('hidden')
+       */
     }
 
     if (e.target.classList.contains('quit-game')) {
       this.newSection = this.menuSection
       this.categoriesSection.style.transform = 'translateX(100%)'
-      e.target.closest('.modal').classList.add('hidden')
+      this.targetInstance.resetData(e.target)
     }
 
     if (e.target.classList.contains('again')) {
@@ -99,23 +100,28 @@ export class Controller {
     this.displayNewSection()
   }
 
-  async createCategories() {
-    const { categories } = data
+  createCategories() {
+    fetch('../public/data/data.json')
+      .then(response => response.json())
+      .then(data => {
+        const { categories } = data
+        this.targetInstance.setData(categories)
+        const keys = Object.keys(categories)
 
-    this.targetInstance.setData(categories)
+        keys.forEach(category => {
+          const html = `<li class='category'>${category.toUpperCase()}</li>`
+          const container = getElement('.categories-container')
+          container.insertAdjacentHTML('afterbegin', html)
+        })
 
-    const keys = Object.keys(categories)
-
-    keys.forEach(category => {
-      const html = `<li class='category'>${category.toUpperCase()}</li>`
-      const container = getElement('.categories-container')
-      container.insertAdjacentHTML('afterbegin', html)
-    })
-
-    const categoriesDom = document.querySelectorAll('.category')
-    categoriesDom.forEach(category => {
-      category.addEventListener('click', this.onForward.bind(this))
-    })
+        const categoriesDom = document.querySelectorAll('.category')
+        categoriesDom.forEach(category => {
+          category.addEventListener('click', this.onForward.bind(this))
+        })
+      })
+      .catch(error => {
+        console.error('Chyba pri načítaní JSON:', error)
+      })
   }
 
   setTargetInstance(instance) {

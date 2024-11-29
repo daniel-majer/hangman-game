@@ -69,7 +69,7 @@ export class Gameplay {
     this.progressBar.max = this.playerStats.health
   }
 
-  resetData() {
+  resetData(target) {
     this.letters.forEach(letter =>
       letter.classList.contains('clicked')
         ? letter.classList.remove('clicked')
@@ -77,6 +77,7 @@ export class Gameplay {
     )
     this.setProgressBar()
     this.playerStats.level = 1
+    if (target) target.closest('.modal').classList.add('hidden')
   }
 
   checkFinish(complete) {
