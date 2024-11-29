@@ -18,6 +18,7 @@ class Gameplay {
     this.playerStats = {
       level: 1,
       maxLevel: 3,
+      time: 60,
       health: '80',
     }
 
@@ -40,7 +41,7 @@ class Gameplay {
   }
 
   startTimer(time) {
-    let leftTime = time || 60
+    let leftTime = time || this.playerStats.time
     this.timer.textContent = this.formatTime(leftTime)
 
     if (this.interval) clearInterval(this.interval)
@@ -139,8 +140,8 @@ class Gameplay {
 
   generateAnswer() {
     const words = this.answer.split(' ')
-    console.log(...words)
-    let displayAnswer = words.map(word => {
+    /*     console.log(...words)
+     */ let displayAnswer = words.map(word => {
       return `<li data-set='${word}'>${word
         .split('')
         .map(w => {
@@ -210,13 +211,14 @@ class Navigation {
 
   unPaused(e) {
     const leftSeconds = Number(getElement('#timer').textContent.split(':')[1])
-    this.targetInstance.startTimer(leftSeconds)
 
     if (
       e.target.classList.contains('continue') ||
       e.target.classList.contains('paused')
-    )
-      return this.modalPaused.classList.add('hidden')
+    ) {
+      this.targetInstance.startTimer(leftSeconds)
+      this.modalPaused.classList.add('hidden')
+    }
   }
 
   hideCurrentSection(numb) {
@@ -243,7 +245,8 @@ class Navigation {
     if (e.target.classList.contains('new-category')) {
       this.newSection = this.categoriesSection
       this.targetInstance.resetData()
-      e.target.closest('.modal').classList.add('hidden')
+      /*       clearInterval(this.targetInstance.interval)
+       */ e.target.closest('.modal').classList.add('hidden')
     }
 
     if (e.target.classList.contains('quit-game')) {
