@@ -36,7 +36,7 @@ section {
 }
 .main-menu img {
   position: absolute;
-  top: 10%;
+  top: 5%;
   left: 50%;
   transform: translateX(-50%);
 }
@@ -686,7 +686,7 @@ progress {
   }
   .main-menu img {
     width: 310px;
-    top: -10%;
+    top: -7%;
   }
   .main-menu div {
     border-radius: 48px;
