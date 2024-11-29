@@ -2,12 +2,14 @@
   "name": "hangman-game",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
   "browserslist": "> 0.5%, last 2 versions, not dead",
-  "scripts": {},
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
+  },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "parcel": "^2.12.0"
+    "parcel": "latest"
   }
 }
