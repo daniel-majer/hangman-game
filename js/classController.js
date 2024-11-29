@@ -1,5 +1,6 @@
 import { getElement } from './helper.js'
-
+/* import data from '../data/data.json' with { type: "json" }
+ */
 export class Controller {
   constructor() {
     this.menuSection = getElement('.main-menu')
@@ -60,8 +61,7 @@ export class Controller {
     if (e.target.classList.contains('new-category')) {
       this.newSection = this.categoriesSection
       this.targetInstance.resetData()
-      /*       clearInterval(this.targetInstance.interval)
-       */ e.target.closest('.modal').classList.add('hidden')
+      e.target.closest('.modal').classList.add('hidden')
     }
 
     if (e.target.classList.contains('quit-game')) {
@@ -100,9 +100,8 @@ export class Controller {
   }
 
   async createCategories() {
-    const response = await fetch('./data/data.json')
+    const response = await fetch('../public/data/data.json')
     if (!response.ok) throw new Error('Network response was not ok')
-
     const { categories } = await response.json()
     this.targetInstance.setData(categories)
 
@@ -129,7 +128,6 @@ export class Controller {
     const heights = elements.map(
       element => element.getBoundingClientRect().height
     )
-
     const maxHeight = Math.max(...heights)
 
     elements.forEach(element => {
