@@ -7,8 +7,8 @@ class App {
     const gameplay = new Gameplay()
 
     start.displayNewSection()
-    start.createCategories()
     start.setTargetInstance(gameplay)
+    start.createCategories()
   }
 }
 

@@ -1,6 +1,6 @@
 import { getElement } from './helper.js'
-/* import data from '../data/data.json' with { type: "json" }
- */
+import data from '../public/data/data.json' assert { type: 'json' }
+
 export class Controller {
   constructor() {
     this.menuSection = getElement('.main-menu')
@@ -100,9 +100,8 @@ export class Controller {
   }
 
   async createCategories() {
-    const response = await fetch('../public/data/data.json')
-    if (!response.ok) throw new Error('Network response was not ok')
-    const { categories } = await response.json()
+    const { categories } = data
+
     this.targetInstance.setData(categories)
 
     const keys = Object.keys(categories)
