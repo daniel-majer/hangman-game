@@ -100,8 +100,28 @@ export class Controller {
     this.displayNewSection()
   }
 
-  createCategories() {
-    fetch('../public/data/data.json')
+  async createCategories() {
+    try {
+      const response = await import('../public/data.json')
+      const { categories } = response
+      this.targetInstance.setData(categories)
+      const keys = Object.keys(categories)
+
+      keys.forEach(category => {
+        const html = `<li class='category'>${category.toUpperCase()}</li>`
+        const container = getElement('.categories-container')
+        container.insertAdjacentHTML('afterbegin', html)
+      })
+
+      const categoriesDom = document.querySelectorAll('.category')
+      categoriesDom.forEach(category => {
+        category.addEventListener('click', this.onForward.bind(this))
+      })
+    } catch (err) {
+      return console.error('Error during loading of JSON:', err)
+    }
+
+    /*     fetch('../data.json')
       .then(response => response.json())
       .then(data => {
         const { categories } = data
@@ -121,7 +141,7 @@ export class Controller {
       })
       .catch(error => {
         console.error('Chyba pri načítaní JSON:', error)
-      })
+      }) */
   }
 
   setTargetInstance(instance) {
