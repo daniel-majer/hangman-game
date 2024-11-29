@@ -1,5 +1,5 @@
 import { getElement } from './helper.js'
-import data from '../public/data/data.json' assert { type: 'json' }
+import data from '../public/data/data.json' with { type: 'json' }
 
 export class Controller {
   constructor() {
