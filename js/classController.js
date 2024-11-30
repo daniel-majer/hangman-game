@@ -132,6 +132,6 @@ export class Controller {
 
     const heightEl = current[0].getBoundingClientRect().height
 
-    this.mainElement.style.height = heightEl + 'px'
+    this.mainElement.style.minHeight = heightEl + 'px'
   }
 }
