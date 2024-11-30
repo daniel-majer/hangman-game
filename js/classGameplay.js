@@ -58,7 +58,6 @@ export class Gameplay {
   handleProgressBar() {
     this.playerStats.health -= this.playerStats.attempts
     this.progressBar.style.width = this.playerStats.health + '%'
-    console.log(Math.floor(this.playerStats.health))
     if (Math.floor(this.playerStats.health) <= 0) {
       this.endGame('You Lose')
     }
