@@ -3,7 +3,7 @@ import { getElement } from './helper.js'
 export class Gameplay {
   constructor() {
     this.answerContainers = getElement('.answer-letters')
-    this.progressBar = getElement('progress')
+    this.progressBar = getElement('.progress-bar')
     this.letters = document.querySelectorAll('.alphabet-letters li')
     this.modalLoseWin = getElement('.lose')
     this.modalTitle = getElement('.lose h1')
@@ -15,7 +15,8 @@ export class Gameplay {
       level: 1,
       maxLevel: 3,
       time: 60,
-      health: '80',
+      attempts: 100 / 8,
+      health: 100,
     }
 
     this.letters.forEach(l => {
@@ -54,8 +55,9 @@ export class Gameplay {
   }
 
   handleProgressBar() {
-    this.progressBar.value -= 10
-    if (this.progressBar.value <= 0) {
+    this.playerStats.health -= this.playerStats.attempts
+    this.progressBar.style.width = this.playerStats.health + '%'
+    if (this.playerStats.health <= 0) {
       this.endGame('You Lose')
     }
   }
@@ -64,19 +66,15 @@ export class Gameplay {
     this.categories = data
   }
 
-  setProgressBar() {
-    this.progressBar.value = this.playerStats.health
-    this.progressBar.max = this.playerStats.health
-  }
-
   resetData(target) {
     this.letters.forEach(letter =>
       letter.classList.contains('clicked')
         ? letter.classList.remove('clicked')
         : ''
     )
-    this.setProgressBar()
     this.playerStats.level = 1
+    this.playerStats.health = 100
+    this.progressBar.style.width = this.playerStats.health + '%'
     if (target) target.closest('.modal').classList.add('hidden')
   }
 
@@ -88,7 +86,7 @@ export class Gameplay {
         return this.endGame('You Win')
 
       setTimeout(() => {
-        this.setAnswer(this.category)
+        this.setCategory(this.category)
 
         this.letters.forEach(letter =>
           letter.classList.contains('clicked')
@@ -160,7 +158,7 @@ export class Gameplay {
     this.categoryHeader.textContent = `${this.category} ${this.playerStats.level}/${this.playerStats.maxLevel}`
   }
 
-  setAnswer(category) {
+  setCategory(category) {
     const categories = Object.entries(this.categories)
 
     for (const c of categories) {
@@ -174,10 +172,5 @@ export class Gameplay {
     this.setTitle()
     this.generateAnswer()
     this.startTimer()
-  }
-
-  setCategory(category) {
-    this.setProgressBar()
-    this.setAnswer(category)
   }
 }
