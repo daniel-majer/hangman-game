@@ -16,7 +16,7 @@ export class Gameplay {
       level: 1,
       maxLevel: 3,
       time: 60,
-      attempts: 100 / 8,
+      attempts: 100 / 12,
       health: 100,
     }
 
