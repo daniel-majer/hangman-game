@@ -246,6 +246,7 @@ section {
   width: 100%;
   max-width: 1920px;
   margin: 0 auto;
+  gap: 5px;
 }
 .gameplay header div {
   display: flex;
@@ -263,29 +264,6 @@ section {
   display: inline-block;
 }
 
-/* Chrome, Safari a Edge */
-progress::-webkit-progress-bar {
-  background-color: #fff;
-  padding: 8px;
-  transition: var(--transition);
-}
-progress::-webkit-progress-value {
-  background-color: #140e66;
-  border-radius: 20px;
-  transition: var(--transition);
-}
-/* Firefox */
-progress::-moz-progress-bar {
-  background-color: #140e66;
-  transition: var(--transition);
-}
-progress {
-  height: 30px;
-  width: 240px;
-  border-radius: 20px;
-  overflow: hidden;
-  transition: var(--transition);
-}
 .progress-container {
   width: 240px;
   height: 30px;
@@ -563,13 +541,11 @@ progress {
     border-radius: 20px;
   }
 
-  .gameplay progress {
+  .progress-container {
     height: 20px;
     width: 150px;
   }
-  .gameplay progress::-webkit-progress-bar {
-    padding: 4px;
-  }
+
   .gameplay h1 {
     font-size: 52px;
     text-align: start;
@@ -636,18 +612,15 @@ progress {
     font-size: 52px;
   }
 
+  .progress-container {
+    height: 20px;
+    width: 150px;
+  }
   .gameplay {
     padding: 20px;
   }
   .gameplay header div {
     column-gap: 20px;
-  }
-  .gameplay progress {
-    height: 20px;
-    width: 120px;
-  }
-  .gameplay progress::-webkit-progress-bar {
-    padding: 4px;
   }
   .gameplay h1 {
     font-size: 36px;
@@ -772,7 +745,7 @@ progress {
   .gameplay header div {
     column-gap: 10px;
   }
-  .gameplay progress {
+  .progress-container {
     height: 20px;
     width: 80px;
   }

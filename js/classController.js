@@ -1,6 +1,5 @@
 import { getElement } from './helper.js'
-/* import data from '../public/data/data.json' assert { type: 'json' }
- */
+
 export class Controller {
   constructor() {
     this.mainElement = getElement('main')
@@ -22,8 +21,6 @@ export class Controller {
       btn.addEventListener('click', this.handleSection.bind(this))
     })
     this.modalPaused.addEventListener('click', this.unPaused.bind(this))
-
-    this.setHeightSections()
   }
 
   unPaused(e) {

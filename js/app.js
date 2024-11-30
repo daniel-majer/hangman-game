@@ -9,6 +9,7 @@ class App {
     start.displayNewSection()
     start.setTargetInstance(gameplay)
     start.createCategories()
+    start.setHeightSections()
   }
 }
 

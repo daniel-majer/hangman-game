@@ -1,4 +1,5 @@
 import { getElement } from './helper.js'
+import { startConfetti } from './confetti.js'
 
 export class Gameplay {
   constructor() {
@@ -82,8 +83,10 @@ export class Gameplay {
     if (complete) {
       this.playerStats.level += 1
 
-      if (this.playerStats.level === this.playerStats.maxLevel + 1)
+      if (this.playerStats.level === this.playerStats.maxLevel + 1) {
+        startConfetti()
         return this.endGame('You Win')
+      }
 
       setTimeout(() => {
         this.setCategory(this.category)
@@ -135,8 +138,7 @@ export class Gameplay {
 
   generateAnswer() {
     const words = this.answer.split(' ')
-    /*     console.log(...words)
-     */ let displayAnswer = words.map(word => {
+    let displayAnswer = words.map(word => {
       return `<li data-set='${word}'>${word
         .split('')
         .map(w => {
